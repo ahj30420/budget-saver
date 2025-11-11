@@ -47,11 +47,6 @@ public class SecurityConfig {
     };
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
@@ -88,7 +83,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager,
+    private JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager,
                                                            CustomAuthenticationSuccessHandler successHandler) {
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter(objectMapper);
         filter.setFilterProcessesUrl("/api/login");
