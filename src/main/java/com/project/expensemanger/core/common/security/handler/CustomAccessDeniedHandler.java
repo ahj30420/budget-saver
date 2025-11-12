@@ -20,6 +20,10 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        responseUtil.writeJsonErrorResponse(response, AuthErrorCode.UNAUTHENTICATED);
+        AuthErrorCode errorCode = AuthErrorCode.UNAUTHENTICATED;
+        if (request.getAttribute("errorCode") instanceof AuthErrorCode) {
+            errorCode = (AuthErrorCode) request.getAttribute("errorCode");
+        }
+        responseUtil.writeJsonErrorResponse(response, errorCode);
     }
 }
