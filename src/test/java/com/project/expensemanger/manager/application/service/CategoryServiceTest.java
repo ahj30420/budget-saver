@@ -12,6 +12,7 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterCate
 import com.project.expensemanger.manager.application.mock.CategoryMock;
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
 import com.project.expensemanger.manager.domain.category.Category;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -87,4 +88,17 @@ class CategoryServiceTest {
         assertThrows(BaseException.class, () -> sut.getCategory(any(Long.class)));
     }
 
+    @Test
+    @DisplayName("카테고리 전체 조회 : 성공")
+    void get_category_all_success_test() throws Exception {
+        // given
+        List<Category> categories = categoryMock.standardDomainListMock();
+        given(categoryPort.findAllByType()).willReturn(categories);
+
+        // when
+        List<Category> allCategories = sut.getAllCategories();
+
+        // then
+        assertThat(allCategories).isEqualTo(categories);
+    }
 }
