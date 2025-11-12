@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "카테고리 API", description = "카테고리 관련 API 명세")
@@ -32,7 +33,6 @@ public interface CategoryControllerSpec {
     );
 
 
-
     @Operation(
             summary = "카테고리 단건 조회",
             description = "카테고리 하나를 조회합니다."
@@ -52,4 +52,19 @@ public interface CategoryControllerSpec {
             )
             Long categoryId
     );
+
+
+    @Operation(
+            summary = "카테고리 전체 조회",
+            description = "카테고리 전체를 조회합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = com.project.expensemanger.core.common.response.ApiResponse.class)
+            )
+    )
+    ResponseEntity<List<GetCategoryResponse>> getAllCategories();
 }

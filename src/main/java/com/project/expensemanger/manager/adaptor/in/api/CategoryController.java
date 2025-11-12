@@ -10,6 +10,7 @@ import com.project.expensemanger.manager.application.port.in.CategoryUseCase;
 import com.project.expensemanger.manager.domain.category.Category;
 import jakarta.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ public class CategoryController implements CategoryControllerSpec {
     private final CategoryUseCase categoryUseCase;
     private final CategoryMapper mapper;
 
+    @Override
     @PostMapping("/api/category")
     public ResponseEntity<CategoryIdResponse> registerCategory(
             @RequestBody @Valid RegisterCategoryRequest requestDto
@@ -35,11 +37,19 @@ public class CategoryController implements CategoryControllerSpec {
         return ResponseEntity.created(location).body(mapper.toIdDto(categoryId));
     }
 
+    @Override
     @GetMapping("/api/category/{categoryId}")
     public ResponseEntity<GetCategoryResponse> getCategory(
             @PathVariable Long categoryId
     ) {
         Category category = categoryUseCase.getCategory(categoryId);
         return ResponseEntity.ok().body(mapper.toGetDto(category));
+    }
+
+    @Override
+    @GetMapping("/api/categories")
+    public ResponseEntity<List<GetCategoryResponse>> getAllCategories() {
+        List<Category> allCategories = categoryUseCase.getAllCategories();
+        return ResponseEntity.ok().body(mapper.toGetListDto(allCategories));
     }
 }

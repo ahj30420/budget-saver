@@ -30,5 +30,9 @@ public class CategoryService implements CategoryUseCase {
         categoryPort.assertNameNotExists(categoryName);
     }
 
+    @Override
     public Category getCategory(Long categoryId) { return categoryPort.findById(categoryId); }
+
+    @Override
+    public List<Category> getAllCategories() { return categoryPort.findAllByType(); }
 }
