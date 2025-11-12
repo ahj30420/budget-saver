@@ -28,4 +28,11 @@ public class CategoryPersistenceAdapter implements CategoryPort {
                     throw new BaseException(CategoryErrorCode.CATEGORY_ALREADY_EXIST);
                 });
     }
+
+    @Override
+    public Category findById(Long categoryId) {
+        return categoryJpaRepository.findById(categoryId)
+                .map(CategoryJpaEntity::toDomain)
+                .orElseThrow(() -> new BaseException(CategoryErrorCode.CATEGORY_NOT_FOUND));
+    }
 }

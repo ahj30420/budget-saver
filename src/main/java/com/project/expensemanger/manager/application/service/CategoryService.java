@@ -4,6 +4,7 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterCate
 import com.project.expensemanger.manager.application.port.in.CategoryUseCase;
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
 import com.project.expensemanger.manager.domain.category.Category;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,4 +29,6 @@ public class CategoryService implements CategoryUseCase {
     private void validateDuplicateCategory(String categoryName) {
         categoryPort.assertNameNotExists(categoryName);
     }
+
+    public Category getCategory(Long categoryId) { return categoryPort.findById(categoryId); }
 }
