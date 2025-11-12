@@ -33,12 +33,20 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         try {
             setAuthenticationContext(request);
         } catch (ExpiredJwtException ee) {
+            request.setAttribute("errorCode", AuthErrorCode.ACCESS_TOKEN_EXPIRED);
             responseUtil.writeJsonErrorResponse(response, AuthErrorCode.ACCESS_TOKEN_EXPIRED);
+            return;
         } catch (SignatureException se) {
+            request.setAttribute("errorCode", AuthErrorCode.INVALID_SIGNATURE_ACCESS_TOKEN);
             responseUtil.writeJsonErrorResponse(response, AuthErrorCode.INVALID_SIGNATURE_ACCESS_TOKEN);
+            return;
         } catch (JwtException je) {
+            request.setAttribute("errorCode", AuthErrorCode.UNAUTHENTICATED);
             responseUtil.writeJsonErrorResponse(response, AuthErrorCode.UNAUTHENTICATED);
+            return;
         }
+
+        filterChain.doFilter(request, response);
     }
 
     @Override

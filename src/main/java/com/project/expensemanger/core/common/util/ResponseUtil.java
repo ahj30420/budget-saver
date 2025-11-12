@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,6 +19,8 @@ public class ResponseUtil {
 
     public void writeJsonSuccessResponse(HttpServletResponse response) throws IOException {
         ApiResponse<Void> body = createSuccessBody();
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
         try (OutputStream out = response.getOutputStream()) {
             objectMapper.writeValue(out, body);
         }
@@ -33,6 +36,8 @@ public class ResponseUtil {
             throws IOException {
         ApiResponse<ErrorResponse> body = createErrorBody(errorCode);
         response.setStatus(body.getBody().getHttpStatus().value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
         try (OutputStream out = response.getOutputStream()) {
             objectMapper.writeValue(out, body);
         }

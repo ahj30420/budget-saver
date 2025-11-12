@@ -7,5 +7,5 @@ public interface UserPort {
 
     void assertEmailNotExists(String email);
 
-    void save(User user);
+    User save(User user);
 }

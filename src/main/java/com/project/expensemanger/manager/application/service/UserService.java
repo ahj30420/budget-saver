@@ -32,7 +32,7 @@ public class UserService implements UserUseCase, UserDetailsService {
     }
 
     @Override
-    public void registerUser(SignupRequest request) {
+    public Long registerUser(SignupRequest request) {
         validateDuplicateEmail(request.email());
 
         String encodedPassword = passwordEncoder.encode(request.password());
@@ -43,7 +43,8 @@ public class UserService implements UserUseCase, UserDetailsService {
                 .role(UserRole.USER)
                 .build();
 
-        userPort.save(user);
+        User savedUser = userPort.save(user);
+        return savedUser.getId();
     }
 
     private void validateDuplicateEmail(String email) {
