@@ -23,4 +23,11 @@ public class CategoryMock {
         return new RegisterCategoryRequest(name, null);
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
