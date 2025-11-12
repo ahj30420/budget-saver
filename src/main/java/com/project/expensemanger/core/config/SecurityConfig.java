@@ -45,12 +45,16 @@ public class SecurityConfig {
             "/webjars/**",
     };
 
+    private static final String[] ADMIN_ENDPOINTS = {
+            "/api/category"
+    };
+
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
 
-        @Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    AuthenticationManager authenticationManager,
                                                    CustomAuthenticationSuccessHandler successHandler,
@@ -67,6 +71,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(ADMIN_ENDPOINTS).hasRole("ADMIN")
                         .anyRequest().authenticated());
 
         http
@@ -83,7 +88,7 @@ public class SecurityConfig {
     }
 
     private JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager,
-                                                           CustomAuthenticationSuccessHandler successHandler) {
+                                                            CustomAuthenticationSuccessHandler successHandler) {
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter(objectMapper);
         filter.setFilterProcessesUrl("/api/login");
         filter.setAuthenticationManager(authenticationManager);

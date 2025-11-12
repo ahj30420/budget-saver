@@ -1,9 +1,9 @@
 package com.project.expensemanger.core.common.security.vo;
 
-import com.project.expensemanger.manager.domain.User.UserRole;
 import io.jsonwebtoken.Claims;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,24 +16,30 @@ public class CustomUserDetails implements UserDetails {
     private final Long id;
     private final String email;
     private final String password;
-    private final UserRole role;
+    private final List<String> roles;
 
     public CustomUserDetails(Claims claims) {
         this.id = claims.get("id", Long.class);
         this.email = claims.getSubject();
         this.password = "";
-        this.role = null;
+        this.roles = claims.get("roles", List.class);
+        ;
     }
 
     public Long getUserIdx() {
         return id;
     }
 
-    public String getEmail() { return email; }
+    public String getEmail() {
+        return email;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of((GrantedAuthority) () -> "ROLE_" + role.name());
+        return roles.stream()
+                .map(role -> (GrantedAuthority) () ->
+                        role.startsWith("ROLE_") ? role : "ROLE_" + role)
+                .collect(Collectors.toList());
     }
 
     @Override
