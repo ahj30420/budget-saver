@@ -114,4 +114,23 @@ class CategoryControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
     }
 
+    @Test
+    @DisplayName("카테고리 전체 조회 : 성공")
+    @WithMockUser(roles = "USER")
+    void get_category_list_test() throws Exception {
+        // given
+        given(categoryUseCase.getAllCategories()).willReturn(categoryMock.standardDomainListMock());
+
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/categories"));
+
+        // then
+        perform
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.length()").value(categoryMock.standardDomainListMock().size()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
 }
