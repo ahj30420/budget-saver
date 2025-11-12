@@ -7,6 +7,7 @@ import com.project.expensemanger.core.common.security.config.AuthTestConfig;
 import com.project.expensemanger.core.config.JacksonConfig;
 import com.project.expensemanger.core.config.SecurityConfig;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.SignupRequest;
+import com.project.expensemanger.manager.adaptor.in.api.mapper.UserMapper;
 import com.project.expensemanger.manager.application.mock.UserMock;
 import com.project.expensemanger.manager.application.port.in.UserUseCase;
 import com.project.expensemanger.manager.domain.User.User;

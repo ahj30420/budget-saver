@@ -16,7 +16,6 @@ import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class AuthTestConfig {
@@ -28,41 +27,36 @@ public class AuthTestConfig {
     public JwtProvider jwtProvider() { return new JwtProvider(jwtProperties()); }
 
     @Bean
-    public ResponseUtil responseUtil() { return new ResponseUtil(new ObjectMapper()); }
+    public ResponseUtil responseUtil(ObjectMapper objectMapper) { return new ResponseUtil(objectMapper); }
 
     @Bean
-    public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
-        return new CustomAuthenticationFailureHandler(responseUtil());
+    public CustomAuthenticationFailureHandler customAuthenticationFailureHandler(ObjectMapper objectMapper) {
+        return new CustomAuthenticationFailureHandler(responseUtil(objectMapper));
     }
 
     @Bean
-    public CustomAccessDeniedHandler customAccessDeniedHandler() {
-        return new CustomAccessDeniedHandler(responseUtil());
+    public CustomAccessDeniedHandler customAccessDeniedHandler(ObjectMapper objectMapper) {
+        return new CustomAccessDeniedHandler(responseUtil(objectMapper));
     }
 
     @Bean
-    public CustomAuthenticationEntryPoint customAuthenticationEntryPoint() {
-        return new CustomAuthenticationEntryPoint(responseUtil());
+    public CustomAuthenticationEntryPoint customAuthenticationEntryPoint(ObjectMapper objectMapper) {
+        return new CustomAuthenticationEntryPoint(responseUtil(objectMapper));
     }
 
     @Bean
-    public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
-        return new CustomAuthenticationSuccessHandler(responseUtil(), jwtProvider(), jwtProperties());
+    public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler(ObjectMapper objectMapper) {
+        return new CustomAuthenticationSuccessHandler(responseUtil(objectMapper), jwtProvider(), jwtProperties());
     }
 
     @Bean
-    public CustomLogoutSuccessHandler customLogoutSuccessHandler() {
-        return new CustomLogoutSuccessHandler(responseUtil());
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public CustomLogoutSuccessHandler customLogoutSuccessHandler(ObjectMapper objectMapper) {
+        return new CustomLogoutSuccessHandler(responseUtil(objectMapper));
     }
 
     @Bean
     public UserMock userMock() {
-        return new UserMock(passwordEncoder());
+        return new UserMock(new BCryptPasswordEncoder());
     }
 
     @Bean
