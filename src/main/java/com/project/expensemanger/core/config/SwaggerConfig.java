@@ -14,7 +14,7 @@ public class SwaggerConfig {
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
                 .group("Expense_Manager")
-                .packagesToScan("com.project.expense_manager")
+                .packagesToScan("com.project.expensemanger")
                 .pathsToMatch("/api/**")
                 .build();
     }
