@@ -6,6 +6,7 @@ import com.project.expensemanger.manager.application.port.in.UserUseCase;
 import com.project.expensemanger.manager.application.port.out.UserPort;
 import com.project.expensemanger.manager.domain.User.User;
 import com.project.expensemanger.manager.domain.User.UserRole;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,7 +28,7 @@ public class UserService implements UserUseCase, UserDetailsService {
                 .id(user.getId())
                 .email(user.getEmail())
                 .password(user.getPassword())
-                .role(user.getRole())
+                .roles(List.of(user.getRole().name()))
                 .build();
     }
 
