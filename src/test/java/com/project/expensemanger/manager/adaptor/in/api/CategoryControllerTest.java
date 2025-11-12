@@ -93,4 +93,25 @@ class CategoryControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.body.message").value(AuthErrorCode.UNAUTHENTICATED.getMessage()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
     }
+
+    @Test
+    @DisplayName("카테고리 단건 조회 : 성공")
+    @WithMockUser(roles = "USER")
+    void get_category_test() throws Exception {
+        // given
+        given(categoryUseCase.getCategory(any(Long.class))).willReturn(categoryMock.standardDomainMock());
+
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/category/{categoryId}", categoryMock.getId()));
+
+        // then
+        perform
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.categoryId").value(categoryMock.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.name").value(categoryMock.getName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
+
 }
