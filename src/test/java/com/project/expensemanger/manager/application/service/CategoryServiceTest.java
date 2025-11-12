@@ -60,4 +60,31 @@ class CategoryServiceTest {
         assertThrows(BaseException.class, () -> sut.register(request));
     }
 
+    @Test
+    @DisplayName("카테고리 단건 조회 : 성공")
+    void get_category_success_test() throws Exception {
+        // given
+        Category mockCategory = categoryMock.standardDomainMock();
+        given(categoryPort.findById(any(Long.class))).willReturn(mockCategory);
+
+        // when
+        Category result = sut.getCategory(mockCategory.getId());
+
+        // then
+        assertThat(result.getId()).isEqualTo(mockCategory.getId());
+        assertThat(result.getName()).isEqualTo(mockCategory.getName());
+    }
+
+    @Test
+    @DisplayName("카테고리 단건 조회 : 실패")
+    void get_category_failure_test() throws Exception {
+        // given
+        doThrow(new BaseException(CategoryErrorCode.CATEGORY_NOT_FOUND))
+                .when(categoryPort)
+                .findById(any(Long.class));
+
+        // when & then
+        assertThrows(BaseException.class, () -> sut.getCategory(any(Long.class)));
+    }
+
 }
