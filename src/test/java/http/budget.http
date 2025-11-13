@@ -1,0 +1,29 @@
+### 예산 등록
+POST http://localhost:8080/api/budget/list
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "budgets": [
+    {
+      "budgetDate": "2025-11-10",
+      "amount": 2000,
+      "categoryId": 3
+    },
+    {
+      "budgetDate": "2025-11-10",
+      "amount": 1000,
+      "categoryId": 4
+    },
+    {
+      "budgetDate": "2025-11-10",
+      "amount": 4000,
+      "categoryId": 5
+    },
+    {
+      "budgetDate": "2025-11-10",
+      "amount": 5000,
+      "categoryId": 6
+    }
+  ]
+}
