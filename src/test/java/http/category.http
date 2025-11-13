@@ -1,0 +1,18 @@
+### 카테고리 등록
+POST http://localhost:8080/api/category
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "name": "식비"
+}
+
+
+### 카테고리 단건 조회
+GET http://localhost:8080/api/category/3
+Authorization: Bearer {{accessToken}}
+
+
+### 카테고리 전체 조회
+GET http://localhost:8080/api/category/list
+Authorization: Bearer {{accessToken}}
