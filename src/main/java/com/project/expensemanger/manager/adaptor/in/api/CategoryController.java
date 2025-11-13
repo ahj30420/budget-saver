@@ -47,7 +47,7 @@ public class CategoryController implements CategoryControllerSpec {
     }
 
     @Override
-    @GetMapping("/api/categories")
+    @GetMapping("/api/category/list")
     public ResponseEntity<List<GetCategoryResponse>> getAllCategories() {
         List<Category> allCategories = categoryUseCase.getAllCategories();
         return ResponseEntity.ok().body(mapper.toGetListDto(allCategories));
