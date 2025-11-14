@@ -1,5 +1,6 @@
 package com.project.expensemanger.manager.adaptor.in.api;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -13,6 +14,8 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudg
 import com.project.expensemanger.manager.adaptor.in.api.mapper.BudgetMapper;
 import com.project.expensemanger.manager.application.mock.BudgetMock;
 import com.project.expensemanger.manager.application.port.in.BudgetUseCase;
+import com.project.expensemanger.manager.domain.budget.Budget;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +68,53 @@ class BudgetControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.body").isArray())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.body.length()").value(budgetMock.domainIdListMock().size()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
+
+    @Test
+    @DisplayName("예산 단건 조회 테스트")
+    @MockCustomUser
+    void get_budget_success_test() throws Exception {
+        // given
+        Budget budget = budgetMock.domainMock();
+        given(budgetUseCase.getBudget(anyLong(), anyLong())).willReturn(budget);
+
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/budget" + "/{budgetId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        perform
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(budget.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.categoryId").value(budget.getCategoryId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.amount").value(budget.getAmount()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.date").value(budget.getDate().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
+
+    @Test
+    @DisplayName("사용자 예산 목록 조회 테스트 : 성공")
+    @MockCustomUser
+    void get_budget_list_success_test() throws Exception {
+        // given
+        List<Budget> budgets = budgetMock.domainListMock();
+        given(budgetUseCase.getBudgetList(anyLong())).willReturn(budgets);
+
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/budget/list")
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        perform
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.length()").value(budgets.size()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
     }
 
