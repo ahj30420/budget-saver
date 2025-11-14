@@ -70,4 +70,9 @@ public class BudgetJpaEntity extends BaseDateTime {
                 .userId(user.getId())
                 .build();
     }
+
+    public void updateFromDomain(Budget updateBudget, CategoryJpaEntity category) {
+        this.amount = updateBudget.getAmount();
+        this.category = category;
+    }
 }

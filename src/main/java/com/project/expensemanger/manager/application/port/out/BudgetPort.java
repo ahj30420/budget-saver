@@ -15,4 +15,6 @@ public interface BudgetPort {
     Budget findByIdAndUserId(Long budgetId, Long userId);
 
     List<Budget> findByUserId(Long userId);
+
+    void update(Budget updateBudget);
 }

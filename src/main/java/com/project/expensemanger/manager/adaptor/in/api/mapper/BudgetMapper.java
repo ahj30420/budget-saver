@@ -8,8 +8,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BudgetMapper {
+
     public List<BudgeIdResponse> toIdListDto(List<Long> budgetIdList) {
         return budgetIdList.stream().map(BudgeIdResponse::new).toList();
+    }
+
+    public BudgeIdResponse toIdDto(Long budgetId) {
+        return new BudgeIdResponse(budgetId);
     }
 
     public BudgetResponse toBudgetDto(Budget budget) {
