@@ -41,4 +41,8 @@ public class BudgetService implements BudgetUseCase {
                     budgetPort.assertDateAndUserIdAndCategoryNotExists(budgetRequest.budgetDate(), budgetRequest.categoryId(), userId);
                 });
     }
+
+    public Budget getBudget(Long userId, Long budgetId) {
+        return budgetPort.findByIdAndUserId(budgetId, userId);
+    }
 }

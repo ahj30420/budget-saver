@@ -4,6 +4,7 @@ import com.project.expensemanger.manager.adaptor.out.jpa.budget.entity.BudgetJpa
 import com.project.expensemanger.manager.domain.budget.Budget;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,4 +24,6 @@ public interface BudgetJpaRepository extends JpaRepository<BudgetJpaEntity, Long
             @Param("userId") Long userId,
             @Param("categoryId") Long categoryId
     );
+
+    Optional<BudgetJpaEntity> findByIdAndUserIdAndIsDeletedFalse(Long budgetId, Long userId);
 }

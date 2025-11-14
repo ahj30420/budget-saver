@@ -2,6 +2,7 @@ package com.project.expensemanger.manager.adaptor.in.api.spec;
 
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudgetList;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.BudgeIdResponse;
+import com.project.expensemanger.manager.adaptor.in.api.dto.response.BudgetResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,6 +33,30 @@ public interface BudgetControllerSpec {
 
             @Parameter(description = "예산 목록 등록 요청 DTO", required = true)
             RegisterBudgetList requestDto
+    );
+
+
+    @Operation(
+            summary = "예산 단건 조회",
+            description = "특정 예산에 대한 정보를 조회합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = com.project.expensemanger.core.common.response.ApiResponse.class)
+            )
+    )
+    ResponseEntity<BudgetResponse> getBudget(
+            @Parameter(hidden = true)
+            Long userId,
+
+            @Parameter(
+                    description = "조회할 예산의 ID",
+                    example = "1"
+            )
+            Long budgetId
     );
 
 }

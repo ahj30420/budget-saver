@@ -11,4 +11,6 @@ public interface BudgetPort {
     List<Budget> saveAll(List<Budget> budgetList);
 
     void assertDateAndUserIdAndCategoryNotExists(LocalDate budgetDate, Long categoryId, Long userId);
+
+    Budget findByIdAndUserId(Long budgetId, Long userId);
 }
