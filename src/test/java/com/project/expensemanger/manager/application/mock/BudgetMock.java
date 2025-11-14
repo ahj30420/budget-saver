@@ -22,6 +22,16 @@ public class BudgetMock {
     private final List<Long> categoryIdList = List.of(1L, 2L, 3L);
     private final List<Long> userIdList = List.of(1L, 2L, 3L);
 
+    public Budget domainMock() {
+        return Budget.builder()
+                .id(id)
+                .categoryId(categoryId)
+                .userId(userId)
+                .amount(amount)
+                .date(date)
+                .build();
+    }
+
     public List<Budget> domainListMock() {
         List<Budget> result = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
@@ -48,5 +58,25 @@ public class BudgetMock {
             result.add(registerBudget);
         }
         return new RegisterBudgetList(result);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public Long getAmount() {
+        return amount;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

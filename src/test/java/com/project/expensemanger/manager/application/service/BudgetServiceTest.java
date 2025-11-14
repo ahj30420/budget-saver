@@ -1,7 +1,7 @@
 package com.project.expensemanger.manager.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
@@ -13,6 +13,7 @@ import com.project.expensemanger.manager.application.mock.BudgetMock;
 import com.project.expensemanger.manager.application.mock.CategoryMock;
 import com.project.expensemanger.manager.application.port.out.BudgetPort;
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
+import com.project.expensemanger.manager.domain.budget.Budget;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -63,7 +64,9 @@ class BudgetServiceTest {
                 .assertDateAndUserIdAndCategoryNotExists(any(LocalDate.class), any(Long.class), any(Long.class));
 
         // when & then
-        assertThrows(BaseException.class, () -> sut.registerBudget(any(Long.class), budgetMock.RegisterRequestDto()));
+        assertThatThrownBy(() -> sut.registerBudget(any(Long.class), budgetMock.RegisterRequestDto()))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BudgetErrorCode.BUDGET_ALREADY_EXIST.getMessage());
     }
 
     @Test
@@ -75,7 +78,52 @@ class BudgetServiceTest {
                 .findById(any(Long.class));
 
         // when & then
-        assertThrows(BaseException.class, () -> sut.registerBudget(any(Long.class), budgetMock.RegisterRequestDto()));
+        assertThatThrownBy(() -> sut.registerBudget(any(Long.class), budgetMock.RegisterRequestDto()))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(CategoryErrorCode.CATEGORY_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("예산 단건 조회 테스트 : 성공")
+    void get_budget_success_test() throws Exception {
+        // given
+        Budget budget = budgetMock.domainMock();
+        given(budgetPort.findByIdAndUserId(any(Long.class), any(Long.class)))
+                .willReturn(budget);
+
+        // when
+        Budget result = sut.getBudget(budget.getId(), budget.getUserId());
+
+        // then
+        assertThat(result).isEqualTo(budget);
+    }
+
+    @Test
+    @DisplayName("예산 단건 조회 테스트 : 실패[해당 예산 조회 결과 없음]")
+    void get_budget_failure_test() throws Exception {
+        // given
+        doThrow(new BaseException(BudgetErrorCode.BUDGET_NOT_FOUND))
+                .when(budgetPort)
+                .findByIdAndUserId(any(Long.class), any(Long.class));
+
+        // when & then
+        assertThatThrownBy(() -> sut.getBudget(any(Long.class), any(Long.class)))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BudgetErrorCode.BUDGET_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("사용자 예산 목록 조회 테스트 : 성공")
+    void get_budget_list_success_test() throws Exception {
+        // given
+        List<Budget> budgets = budgetMock.domainListMock();
+        given(sut.getBudgetList(any(Long.class))).willReturn(budgets);
+
+        // when
+        List<Budget> result = sut.getBudgetList(budgetMock.getId());
+
+        // then
+        assertThat(budgets).isEqualTo(result);
     }
 
 }
