@@ -45,4 +45,9 @@ public class BudgetService implements BudgetUseCase {
     public Budget getBudget(Long userId, Long budgetId) {
         return budgetPort.findByIdAndUserId(budgetId, userId);
     }
+
+    @Override
+    public List<Budget> getBudgetList(Long userId) {
+        return budgetPort.findByUserId(userId);
+    }
 }

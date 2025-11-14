@@ -9,4 +9,6 @@ public interface BudgetUseCase {
     List<Long> registerBudget(Long userId, RegisterBudgetList requestDto);
 
     Budget getBudget(Long userId, Long budgetId);
+
+    List<Budget> getBudgetList(Long userId);
 }

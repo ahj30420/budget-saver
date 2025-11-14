@@ -53,4 +53,11 @@ public class BudgetPersistenceAdapter implements BudgetPort {
                 .map(BudgetJpaEntity::toDmain)
                 .orElseThrow(() -> new BaseException(BudgetErrorCode.BUDGET_NOT_FOUND));
     }
+
+    @Override
+    public List<Budget> findByUserId(Long userId) {
+        return budgetJpaRepository.findByUserIdAndIsDeletedFalse(userId).stream()
+                .map(BudgetJpaEntity::toDmain)
+                .toList();
+    }
 }

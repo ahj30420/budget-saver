@@ -3,6 +3,7 @@ package com.project.expensemanger.manager.adaptor.out.jpa.budget;
 import com.project.expensemanger.manager.adaptor.out.jpa.budget.entity.BudgetJpaEntity;
 import com.project.expensemanger.manager.domain.budget.Budget;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,6 @@ public interface BudgetJpaRepository extends JpaRepository<BudgetJpaEntity, Long
     );
 
     Optional<BudgetJpaEntity> findByIdAndUserIdAndIsDeletedFalse(Long budgetId, Long userId);
+
+    List<BudgetJpaEntity> findByUserIdAndIsDeletedFalse(Long userId);
 }

@@ -1,5 +1,6 @@
 package com.project.expensemanger.manager.adaptor.in.api.spec;
 
+import com.project.expensemanger.core.common.annotation.CurrentUser;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudgetList;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.BudgeIdResponse;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.BudgetResponse;
@@ -57,6 +58,24 @@ public interface BudgetControllerSpec {
                     example = "1"
             )
             Long budgetId
+    );
+
+
+    @Operation(
+            summary = "사용자 예산 조회",
+            description = "사용자의 모든 예산에 대한 정보를 조회합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = com.project.expensemanger.core.common.response.ApiResponse.class)
+            )
+    )
+    ResponseEntity<List<BudgetResponse>> getBudgetList(
+            @Parameter(hidden = true)
+            Long userId
     );
 
 }

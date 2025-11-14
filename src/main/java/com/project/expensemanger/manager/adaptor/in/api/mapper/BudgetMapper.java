@@ -20,4 +20,16 @@ public class BudgetMapper {
                 .amount(budget.getAmount())
                 .build();
     }
+
+    public List<BudgetResponse> toBudgetListDto(List<Budget> budgets) {
+        return budgets.stream()
+                .map(b -> {
+                            return BudgetResponse.builder()
+                                    .id(b.getId())
+                                    .categoryId(b.getCategoryId())
+                                    .date(b.getDate())
+                                    .amount(b.getAmount())
+                                    .build();
+                        }).toList();
+    }
 }

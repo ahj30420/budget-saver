@@ -13,4 +13,6 @@ public interface BudgetPort {
     void assertDateAndUserIdAndCategoryNotExists(LocalDate budgetDate, Long categoryId, Long userId);
 
     Budget findByIdAndUserId(Long budgetId, Long userId);
+
+    List<Budget> findByUserId(Long userId);
 }

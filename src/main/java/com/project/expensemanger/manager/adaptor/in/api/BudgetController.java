@@ -48,4 +48,12 @@ public class BudgetController implements BudgetControllerSpec {
         Budget budget = budgetUseCase.getBudget(userId, budgetId);
         return ResponseEntity.ok().body(budgetMapper.toBudgetDto(budget));
     }
+
+    @GetMapping("/api/budget/list")
+    public ResponseEntity<List<BudgetResponse>> getBudgetList(
+            @CurrentUser Long userId
+    ) {
+        List<Budget> budgets = budgetUseCase.getBudgetList(userId);
+        return ResponseEntity.ok().body(budgetMapper.toBudgetListDto(budgets));
+    }
 }
