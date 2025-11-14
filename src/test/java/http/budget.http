@@ -27,3 +27,8 @@ Authorization: Bearer {{accessToken}}
     }
   ]
 }
+
+
+### 예산 단건 조회
+GET http://localhost:8080/api/budget/6
+Authorization: Bearer {{accessToken}}
