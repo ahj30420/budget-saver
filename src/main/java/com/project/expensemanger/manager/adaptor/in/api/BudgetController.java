@@ -71,7 +71,7 @@ public class BudgetController implements BudgetControllerSpec {
         Long updateBudgetId = budgetUseCase.updateBudget(userId, budgetId, requestDto);
         URI location = UrlCreator.createUri(DEFAULT, updateBudgetId);
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, location.toString())
+                .header(HttpHeaders.LOCATION, location.toString())
                 .body(budgetMapper.toIdDto(updateBudgetId));
     }
 }
