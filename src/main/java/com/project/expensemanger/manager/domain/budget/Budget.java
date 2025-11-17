@@ -23,17 +23,17 @@ public class Budget {
         this.amount = amount;
     }
 
-    public void updateAmount(Long amount) {
-        if (amount == null || amount <= 0) {
+    public void updateAmount(Long changedAmount) {
+        if (changedAmount == null || changedAmount <= 0) {
             throw new BaseException(BudgetErrorCode.INVALID_BUDGET_AMOUNT);
         }
-        this.amount = amount;
+        this.amount = changedAmount;
     }
 
-    public void updateCategory(Long categoryId) {
-        if (categoryId == null || categoryId <= 0) {
+    public void updateCategory(Long changedCategoryId) {
+        if (changedCategoryId == null || changedCategoryId <= 0) {
             throw new BaseException(BudgetErrorCode.INVALID_BUDGET_CATEGORY);
         }
-        this.categoryId = categoryId;
+        this.categoryId = changedCategoryId;
     }
 }
