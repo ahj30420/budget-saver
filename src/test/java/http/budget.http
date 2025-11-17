@@ -47,3 +47,9 @@ Authorization: Bearer {{accessToken}}
   "amount": 1000,
   "categoryId": 5
 }
+
+
+
+### 예산 삭제
+DELETE http://localhost:8080/api/budget/8
+Authorization: Bearer {{accessToken}}
