@@ -4,7 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.project.expensemanger.core.common.exception.BaseException;
 import com.project.expensemanger.core.common.exception.errorcode.BudgetErrorCode;
@@ -170,5 +173,34 @@ class BudgetServiceTest {
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BudgetErrorCode.INVALID_BUDGET_AMOUNT.getMessage());
 
+    }
+
+    @Test
+    @DisplayName("예산 삭제 테스트 : 성공")
+    void delete_budget_success_test() throws Exception {
+        // given
+        Budget budget = budgetMock.domainMock();
+        given(budgetPort.findByIdAndUserId(any(Long.class), any(Long.class))).willReturn(budget);
+        willDoNothing().given(budgetPort).delete(any(Budget.class));
+
+        // when
+        sut.deleteBudget(budget.getId(), budget.getUserId());
+
+        // then
+        verify(budgetPort, times(1)).delete(any(Budget.class));
+    }
+
+    @Test
+    @DisplayName("예산 삭제 테스트 : 실패[해당 예산을 찾지 못했을 경우]")
+    void delete_budget_fail_when_not_found_budget() throws Exception {
+        // given
+        doThrow(new BaseException(BudgetErrorCode.BUDGET_NOT_FOUND))
+                .when(budgetPort)
+                .findByIdAndUserId(any(Long.class), any(Long.class));
+
+        // when & then
+        assertThatThrownBy(() -> sut.deleteBudget(1L, 1L))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BudgetErrorCode.BUDGET_NOT_FOUND.getMessage());
     }
 }
