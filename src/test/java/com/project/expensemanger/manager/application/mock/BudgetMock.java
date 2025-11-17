@@ -2,6 +2,7 @@ package com.project.expensemanger.manager.application.mock;
 
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudget;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudgetList;
+import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateBudgetRequest;
 import com.project.expensemanger.manager.domain.budget.Budget;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,7 +15,13 @@ public class BudgetMock {
     private final Long id = 1L;
     private final LocalDate date = LocalDate.of(2025, 11, 11);
     private final Long amount = 2000L;
+    private final Long changedAmount = 1000L;
+    private final Long zeroAmount = 0L;
+    private final Long negativeAmount = -1L;
     private final Long categoryId = 1L;
+    private final Long changedCategoryId = 2L;
+    private final Long zeroCategoryId = 0L;
+    private final Long negativeCategoryId = -1L;
     private final Long userId = 1L;
 
     private final List<Long> idList = List.of(1L, 2L, 3L);
@@ -60,6 +67,14 @@ public class BudgetMock {
         return new RegisterBudgetList(result);
     }
 
+    public UpdateBudgetRequest UpdateRequestDto() {
+        return new UpdateBudgetRequest(changedAmount, changedCategoryId);
+    }
+
+    public UpdateBudgetRequest ZeroAmountUpdateRequestDto() {
+        return new UpdateBudgetRequest(zeroAmount, changedCategoryId);
+    }
+
     public Long getId() {
         return id;
     }
@@ -72,8 +87,17 @@ public class BudgetMock {
         return amount;
     }
 
+    public Long getChangedAmount() {
+        return changedAmount;
+    }
+
     public Long getCategoryId() {
         return categoryId;
+    }
+
+
+    public Long getChangedCategoryId() {
+        return changedCategoryId;
     }
 
     public Long getUserId() {

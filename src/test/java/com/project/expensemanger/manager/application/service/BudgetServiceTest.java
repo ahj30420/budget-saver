@@ -9,6 +9,7 @@ import static org.mockito.Mockito.doThrow;
 import com.project.expensemanger.core.common.exception.BaseException;
 import com.project.expensemanger.core.common.exception.errorcode.BudgetErrorCode;
 import com.project.expensemanger.core.common.exception.errorcode.CategoryErrorCode;
+import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateBudgetRequest;
 import com.project.expensemanger.manager.application.mock.BudgetMock;
 import com.project.expensemanger.manager.application.mock.CategoryMock;
 import com.project.expensemanger.manager.application.port.out.BudgetPort;
@@ -126,4 +127,48 @@ class BudgetServiceTest {
         assertThat(budgets).isEqualTo(result);
     }
 
+    @Test
+    @DisplayName("예산 수정 테스트 : 성공")
+    void update_budget_success_test() throws Exception {
+        // given
+        UpdateBudgetRequest requestDto = budgetMock.UpdateRequestDto();
+        Budget budget = budgetMock.domainMock();
+        given(budgetPort.findByIdAndUserId(any(Long.class), any(Long.class))).willReturn(budget);
+
+        // when
+        Budget changedBudget = sut.updateBudget(budget.getUserId(), budget.getCategoryId(), requestDto);
+
+        // then
+        assertThat(changedBudget.getId()).isEqualTo(budget.getId());
+        assertThat(changedBudget.getAmount()).isEqualTo(requestDto.amount());
+        assertThat(changedBudget.getCategoryId()).isEqualTo(budget.getCategoryId());
+    }
+
+    @Test
+    @DisplayName("예산 수정 테스트 : 실패[수정할 예산을 찾지 못한 경우]")
+    void update_budget_fail_when_not_find_budget() throws Exception {
+        // given
+        doThrow(new BaseException(BudgetErrorCode.BUDGET_NOT_FOUND))
+                .when(budgetPort)
+                .findByIdAndUserId(any(Long.class), any(Long.class));
+
+        // when & then
+        assertThatThrownBy(() -> sut.updateBudget(1L, 1L, budgetMock.UpdateRequestDto()))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BudgetErrorCode.BUDGET_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("예산 수정 테스트 : 실패[도메인 예외 발생 시]")
+    void update_budget_fail_when_domain_execption() throws Exception {
+        // given
+        Budget budget = budgetMock.domainMock();
+        given(budgetPort.findByIdAndUserId(any(Long.class), any(Long.class))).willReturn(budget);
+
+        // when & then
+        assertThatThrownBy(() -> sut.updateBudget(1L, 1L, budgetMock.ZeroAmountUpdateRequestDto()))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BudgetErrorCode.INVALID_BUDGET_AMOUNT.getMessage());
+
+    }
 }
