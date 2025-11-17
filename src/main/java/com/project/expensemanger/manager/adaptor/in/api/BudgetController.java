@@ -68,10 +68,10 @@ public class BudgetController implements BudgetControllerSpec {
             @PathVariable Long budgetId,
             @RequestBody @Valid UpdateBudgetRequest requestDto
     ) {
-        Long updateBudgetId = budgetUseCase.updateBudget(userId, budgetId, requestDto);
-        URI location = UrlCreator.createUri(DEFAULT, updateBudgetId);
+        Budget updateBudget = budgetUseCase.updateBudget(userId, budgetId, requestDto);
+        URI location = UrlCreator.createUri(DEFAULT, updateBudget.getId());
         return ResponseEntity.ok()
                 .header(HttpHeaders.LOCATION, location.toString())
-                .body(budgetMapper.toIdDto(updateBudgetId));
+                .body(budgetMapper.toIdDto(updateBudget));
     }
 }

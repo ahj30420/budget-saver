@@ -13,8 +13,8 @@ public class BudgetMapper {
         return budgetIdList.stream().map(BudgeIdResponse::new).toList();
     }
 
-    public BudgeIdResponse toIdDto(Long budgetId) {
-        return new BudgeIdResponse(budgetId);
+    public BudgeIdResponse toIdDto(Budget budget) {
+        return new BudgeIdResponse(budget.getId());
     }
 
     public BudgetResponse toBudgetDto(Budget budget) {

@@ -8,11 +8,9 @@ import com.project.expensemanger.manager.application.port.out.CategoryPort;
 import com.project.expensemanger.manager.domain.budget.Budget;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BudgetService implements BudgetUseCase {
@@ -59,12 +57,11 @@ public class BudgetService implements BudgetUseCase {
 
     @Override
     @Transactional
-    public Long updateBudget(Long userId, Long budgetId, UpdateBudgetRequest requestDto) {
+    public Budget updateBudget(Long userId, Long budgetId, UpdateBudgetRequest requestDto) {
         Budget budget = getBudget(userId, budgetId);
         update(budget, requestDto);
-        log.info("updateAmount: {}, updateCategoryId: {}", budget.getAmount(), budget.getCategoryId());
         budgetPort.update(budget);
-        return budget.getId();
+        return budget;
     }
 
     private void update(Budget budget, UpdateBudgetRequest request) {

@@ -13,5 +13,5 @@ public interface BudgetUseCase {
 
     List<Budget> getBudgetList(Long userId);
 
-    Long updateBudget(Long userId, Long budgetId, UpdateBudgetRequest requestDto);
+    Budget updateBudget(Long userId, Long budgetId, UpdateBudgetRequest requestDto);
 }
