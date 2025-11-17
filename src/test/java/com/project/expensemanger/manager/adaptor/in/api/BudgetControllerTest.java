@@ -11,6 +11,7 @@ import com.project.expensemanger.core.common.security.config.AuthTestConfig;
 import com.project.expensemanger.core.config.JacksonConfig;
 import com.project.expensemanger.core.config.SecurityConfig;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudgetList;
+import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateBudgetRequest;
 import com.project.expensemanger.manager.adaptor.in.api.mapper.BudgetMapper;
 import com.project.expensemanger.manager.application.mock.BudgetMock;
 import com.project.expensemanger.manager.application.port.in.BudgetUseCase;
@@ -115,6 +116,33 @@ class BudgetControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.body").isArray())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.body.length()").value(budgets.size()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
+
+    @Test
+    @DisplayName("예산 수정 테스트 : 성공")
+    @MockCustomUser
+    void update_budget_success_test() throws Exception {
+        // given
+        Budget updatedBudget = budgetMock.domainMock();
+        UpdateBudgetRequest requestDto = budgetMock.UpdateRequestDto();
+        String content = objectMapper.writeValueAsString(requestDto);
+
+        given(budgetUseCase.updateBudget(anyLong(), anyLong(), any(UpdateBudgetRequest.class)))
+                .willReturn(updatedBudget);
+
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.patch("/api/budget" + "/{budgetId}", 1L)
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        perform
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.header().string("Location", "/api/budget/" + updatedBudget.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.budgetId").value(budgetMock.domainMock().getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
     }
 
