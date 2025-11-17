@@ -146,4 +146,18 @@ class BudgetControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
     }
 
+    @Test
+    @DisplayName("예산 삭제 테스트 : 성공")
+    @MockCustomUser
+    void delete_budget_success_test() throws Exception {
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/budget" + "/{budgetId}", 1L));
+
+        // then
+        perform
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
 }
