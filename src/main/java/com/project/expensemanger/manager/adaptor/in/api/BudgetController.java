@@ -16,6 +16,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -73,5 +74,14 @@ public class BudgetController implements BudgetControllerSpec {
         return ResponseEntity.ok()
                 .header(HttpHeaders.LOCATION, location.toString())
                 .body(budgetMapper.toIdDto(updateBudget));
+    }
+
+    @DeleteMapping("/api/budget/{budgetId}")
+    public ResponseEntity<Void> deleteBudget(
+            @CurrentUser Long userId,
+            @PathVariable Long budgetId
+    ) {
+        budgetUseCase.deleteBudget(userId, budgetId);
+        return ResponseEntity.noContent().build();
     }
 }

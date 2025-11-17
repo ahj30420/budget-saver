@@ -14,4 +14,6 @@ public interface BudgetUseCase {
     List<Budget> getBudgetList(Long userId);
 
     Budget updateBudget(Long userId, Long budgetId, UpdateBudgetRequest requestDto);
+
+    void deleteBudget(Long userId, Long budgetId);
 }

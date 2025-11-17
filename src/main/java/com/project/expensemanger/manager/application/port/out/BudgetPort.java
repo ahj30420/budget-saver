@@ -17,4 +17,6 @@ public interface BudgetPort {
     List<Budget> findByUserId(Long userId);
 
     void update(Budget updateBudget);
+
+    void delete(Budget budget);
 }

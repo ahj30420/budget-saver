@@ -68,4 +68,11 @@ public class BudgetService implements BudgetUseCase {
         budget.updateAmount(request.amount());
         budget.updateCategory(request.categoryId());
     }
+
+    @Override
+    @Transactional
+    public void deleteBudget(Long userId, Long budgetId) {
+        Budget budget = getBudget(userId, budgetId);
+        budgetPort.delete(budget);
+    }
 }

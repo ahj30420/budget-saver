@@ -75,4 +75,8 @@ public class BudgetJpaEntity extends BaseDateTime {
         this.amount = updateBudget.getAmount();
         this.category = category;
     }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
 }

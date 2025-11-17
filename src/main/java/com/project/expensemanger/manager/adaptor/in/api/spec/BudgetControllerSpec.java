@@ -37,7 +37,6 @@ public interface BudgetControllerSpec {
     );
 
 
-
     @Operation(
             summary = "예산 단건 조회",
             description = "특정 예산에 대한 정보를 조회합니다."
@@ -62,8 +61,6 @@ public interface BudgetControllerSpec {
     );
 
 
-
-
     @Operation(
             summary = "사용자 예산 조회",
             description = "사용자의 모든 예산에 대한 정보를 조회합니다."
@@ -80,6 +77,7 @@ public interface BudgetControllerSpec {
             @Parameter(hidden = true)
             Long userId
     );
+
 
 
 
@@ -100,7 +98,7 @@ public interface BudgetControllerSpec {
             Long userId,
 
             @Parameter(
-                    description = "조회할 예산의 ID",
+                    description = "수정할 예산의 ID",
                     example = "1"
             )
             Long budgetId,
@@ -109,4 +107,29 @@ public interface BudgetControllerSpec {
             UpdateBudgetRequest requestDto
     );
 
+
+
+
+    @Operation(
+            summary = "예산 삭제",
+            description = "예산 정보를 삭제합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = com.project.expensemanger.core.common.response.ApiResponse.class)
+            )
+    )
+    public ResponseEntity<Void> deleteBudget(
+            @Parameter(hidden = true)
+            Long userId,
+
+            @Parameter(
+                    description = "삭제할 예산의 ID",
+                    example = "1"
+            )
+            Long budgetId
+    );
 }
