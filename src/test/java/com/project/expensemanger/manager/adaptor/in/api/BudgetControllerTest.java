@@ -160,4 +160,25 @@ class BudgetControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
     }
+
+    @Test
+    @DisplayName("예산 추천 테스트 : 성공")
+    @MockCustomUser
+    void get_recommend_budget_success_test() throws Exception {
+        // given
+        Long amount = 600000L;
+        given(budgetUseCase.getRecommendBudgetByCategory(amount)).willReturn(budgetMock.recommendedBudgetListMock());
+
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/budget/recommendation" + "?amount=" + amount));
+
+        // then
+        perform
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.length()").value(budgetMock.recommendedBudgetListMock().size()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
 }

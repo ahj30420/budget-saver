@@ -3,6 +3,7 @@ package com.project.expensemanger.manager.application.mock;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudget;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudgetList;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateBudgetRequest;
+import com.project.expensemanger.manager.adaptor.in.api.dto.response.RecommendBudgetResponse;
 import com.project.expensemanger.manager.domain.budget.Budget;
 import com.project.expensemanger.manager.domain.budget.recommendation.vo.CategoryBudgetStat;
 import com.project.expensemanger.manager.domain.budget.recommendation.vo.RecommendedBudgetResult;
@@ -80,13 +81,13 @@ public class BudgetMock {
     public List<CategoryBudgetStat> categoryBudgetStatMock() {
         return List.of(
                 new CategoryBudgetStat(1L, "기타", 1000L),
-                new CategoryBudgetStat(2L, "식비", 500L));   
+                new CategoryBudgetStat(2L, "식비", 500L));
     }
 
     public List<RecommendedBudgetResult> recommendedBudgetListMock() {
         return List.of(
                 new RecommendedBudgetResult(2L, "식비", 500000L),
-                new RecommendedBudgetResult(1L, "기타", 500000L));
+                new RecommendedBudgetResult(1L, "기타", 100000L));
     }
 
     public Long getId() {
