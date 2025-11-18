@@ -4,6 +4,8 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudg
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudgetList;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateBudgetRequest;
 import com.project.expensemanger.manager.domain.budget.Budget;
+import com.project.expensemanger.manager.domain.budget.recommendation.vo.CategoryBudgetStat;
+import com.project.expensemanger.manager.domain.budget.recommendation.vo.RecommendedBudgetResult;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +75,18 @@ public class BudgetMock {
 
     public UpdateBudgetRequest ZeroAmountUpdateRequestDto() {
         return new UpdateBudgetRequest(zeroAmount, changedCategoryId);
+    }
+
+    public List<CategoryBudgetStat> categoryBudgetStatMock() {
+        return List.of(
+                new CategoryBudgetStat(1L, "기타", 1000L),
+                new CategoryBudgetStat(2L, "식비", 500L));   
+    }
+
+    public List<RecommendedBudgetResult> recommendedBudgetListMock() {
+        return List.of(
+                new RecommendedBudgetResult(2L, "식비", 500000L),
+                new RecommendedBudgetResult(1L, "기타", 500000L));
     }
 
     public Long getId() {
