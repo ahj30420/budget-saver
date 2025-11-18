@@ -3,6 +3,8 @@ package com.project.expensemanger.manager.application.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doThrow;
@@ -18,6 +20,8 @@ import com.project.expensemanger.manager.application.mock.CategoryMock;
 import com.project.expensemanger.manager.application.port.out.BudgetPort;
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
 import com.project.expensemanger.manager.domain.budget.Budget;
+import com.project.expensemanger.manager.domain.budget.recommendation.BudgetRecommendationContext;
+import com.project.expensemanger.manager.domain.budget.recommendation.vo.RecommendedBudgetResult;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +42,9 @@ class BudgetServiceTest {
 
     @Mock
     private CategoryPort categoryPort;
+
+    @Mock
+    private BudgetRecommendationContext context;
 
     private BudgetMock budgetMock = new BudgetMock();
 
@@ -202,5 +209,34 @@ class BudgetServiceTest {
         assertThatThrownBy(() -> sut.deleteBudget(1L, 1L))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BudgetErrorCode.BUDGET_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("예산 추천 테스트 : 성공")
+    void get_recommend_budget_success_test() throws Exception {
+        // given
+        List<RecommendedBudgetResult> recommendedBudgetResults = budgetMock.recommendedBudgetListMock();
+        given(budgetPort.findTotalBudgetByCategory()).willReturn(budgetMock.categoryBudgetStatMock());
+        given(context.recommend(anyLong(), anyList())).willReturn(recommendedBudgetResults);
+
+        // when
+        List<RecommendedBudgetResult> result = sut.getRecommendBudgetByCategory(5000L);
+
+        // then
+        assertThat(result).isEqualTo(recommendedBudgetResults);
+    }
+
+    @Test
+    @DisplayName("예산 추천 테스트 : 실패[예산 추천 전략 조회 실패]")
+    void get_recommend_budget_fail_when_not_found_recommend_strategy() throws Exception {
+        // given
+        given(budgetPort.findTotalBudgetByCategory()).willReturn(budgetMock.categoryBudgetStatMock());
+        doThrow(new BaseException(BudgetErrorCode.NOT_FOUND_RECOMMEND_STRATEGY))
+                .when(context).recommend(anyLong(), anyList());
+
+        // when & then
+        assertThatThrownBy(() -> sut.getRecommendBudgetByCategory(5000L))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BudgetErrorCode.NOT_FOUND_RECOMMEND_STRATEGY.getMessage());
     }
 }
