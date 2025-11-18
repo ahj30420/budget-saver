@@ -89,6 +89,7 @@ public class BudgetController implements BudgetControllerSpec {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @GetMapping("/api/budget/recommendation")
     public ResponseEntity<List<RecommendBudgetResponse>> getRecommendBudget(
             @RequestParam Long amount
@@ -97,6 +98,7 @@ public class BudgetController implements BudgetControllerSpec {
         return ResponseEntity.ok().body(budgetMapper.toRecommendBudgetDto(recommendedBudgetResults));
     }
 
+    @Override
     @GetMapping("/api/budget/recommendation/v2")
     public ResponseEntity<List<RecommendBudgetResponse>> getRecommendBudgetV2(
             @RequestParam Long amount
