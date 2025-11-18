@@ -57,3 +57,7 @@ Authorization: Bearer {{accessToken}}
 ### 예산 추천
 GET http://localhost:8080/api/budget/recommendation?amount=1000000
 Authorization: Bearer {{accessToken}}
+
+### 예산 추천 v2
+GET http://localhost:8080/api/budget/recommendation/v2?amount=1000000
+Authorization: Bearer {{accessToken}}
