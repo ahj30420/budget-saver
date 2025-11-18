@@ -41,7 +41,7 @@ public class BudgetController implements BudgetControllerSpec {
             @CurrentUser Long userId,
             @Valid @RequestBody RegisterBudgetList requestDto
     ) {
-        List<Long> budgetIdList =  budgetUseCase.registerBudget(userId, requestDto);
+        List<Long> budgetIdList = budgetUseCase.registerBudget(userId, requestDto);
         URI location = UrlCreator.createCollectionUri(DEFAULT + "/list");
         return ResponseEntity.created(location).body(budgetMapper.toIdListDto(budgetIdList));
     }
@@ -94,6 +94,14 @@ public class BudgetController implements BudgetControllerSpec {
             @RequestParam Long amount
     ) {
         List<RecommendedBudgetResult> recommendedBudgetResults = budgetUseCase.getRecommendBudgetByCategory(amount);
+        return ResponseEntity.ok().body(budgetMapper.toRecommendBudgetDto(recommendedBudgetResults));
+    }
+
+    @GetMapping("/api/budget/recommendation/v2")
+    public ResponseEntity<List<RecommendBudgetResponse>> getRecommendBudgetV2(
+            @RequestParam Long amount
+    ) {
+        List<RecommendedBudgetResult> recommendedBudgetResults = budgetUseCase.getRecommendBudgetByCategoryV2(amount);
         return ResponseEntity.ok().body(budgetMapper.toRecommendBudgetDto(recommendedBudgetResults));
     }
 }

@@ -19,4 +19,7 @@ public interface BudgetPort {
     void delete(Budget budget);
 
     List<CategoryBudgetStat> findTotalBudgetByCategory();
+
+    List<CategoryBudgetStat> findSummaryByCategory();
+
 }

@@ -3,6 +3,7 @@ package com.project.expensemanger.manager.adaptor.out;
 import com.project.expensemanger.core.common.exception.BaseException;
 import com.project.expensemanger.core.common.exception.errorcode.BudgetErrorCode;
 import com.project.expensemanger.manager.adaptor.out.jpa.budget.BudgetJpaRepository;
+import com.project.expensemanger.manager.adaptor.out.jpa.budget.CategoryBudgetSummaryJpaRespository;
 import com.project.expensemanger.manager.adaptor.out.jpa.budget.entity.BudgetJpaEntity;
 import com.project.expensemanger.manager.adaptor.out.jpa.category.CategoryJpaRepository;
 import com.project.expensemanger.manager.adaptor.out.jpa.category.entity.CategoryJpaEntity;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Repository;
 public class BudgetPersistenceAdapter implements BudgetPort {
 
     private final BudgetJpaRepository budgetJpaRepository;
+    private final CategoryBudgetSummaryJpaRespository categoryBudgetSummaryJpaRespository;
     private final UserJpaRepository userJpaRepository;
     private final CategoryJpaRepository categoryJpaRepository;
 
@@ -84,6 +86,16 @@ public class BudgetPersistenceAdapter implements BudgetPort {
     @Override
     public List<CategoryBudgetStat> findTotalBudgetByCategory() {
         return budgetJpaRepository.findTotalBudgetByCategory().stream()
+                .map(row -> new CategoryBudgetStat(
+                        row.categoryId(),
+                        row.categoryName(),
+                        row.totalBudgetAmount()
+                )).toList();
+    }
+
+    @Override
+    public List<CategoryBudgetStat> findSummaryByCategory() {
+        return categoryBudgetSummaryJpaRespository.findSummaryByCategory().stream()
                 .map(row -> new CategoryBudgetStat(
                         row.categoryId(),
                         row.categoryName(),

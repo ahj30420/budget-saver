@@ -83,7 +83,13 @@ public class BudgetService implements BudgetUseCase {
     @Override
     @Transactional(readOnly = true)
     public List<RecommendedBudgetResult> getRecommendBudgetByCategory(Long totalAmount) {
-        List<CategoryBudgetStat> stats  = budgetPort.findTotalBudgetByCategory();
+        List<CategoryBudgetStat> stats = budgetPort.findTotalBudgetByCategory();
+        return recommendationContext.recommend(totalAmount, stats);
+    }
+
+    @Override
+    public List<RecommendedBudgetResult> getRecommendBudgetByCategoryV2(Long totalAmount) {
+        List<CategoryBudgetStat> stats = budgetPort.findSummaryByCategory();
         return recommendationContext.recommend(totalAmount, stats);
     }
 }

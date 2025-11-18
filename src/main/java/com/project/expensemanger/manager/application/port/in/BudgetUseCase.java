@@ -20,4 +20,6 @@ public interface BudgetUseCase {
     void deleteBudget(Long userId, Long budgetId);
 
     List<RecommendedBudgetResult> getRecommendBudgetByCategory(Long amount);
+
+    List<RecommendedBudgetResult> getRecommendBudgetByCategoryV2(Long amount);
 }
