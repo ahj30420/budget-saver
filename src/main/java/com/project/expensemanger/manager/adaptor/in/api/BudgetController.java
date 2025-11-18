@@ -6,10 +6,12 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudg
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateBudgetRequest;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.BudgeIdResponse;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.BudgetResponse;
+import com.project.expensemanger.manager.adaptor.in.api.dto.response.RecommendBudgetResponse;
 import com.project.expensemanger.manager.adaptor.in.api.mapper.BudgetMapper;
 import com.project.expensemanger.manager.adaptor.in.api.spec.BudgetControllerSpec;
 import com.project.expensemanger.manager.application.port.in.BudgetUseCase;
 import com.project.expensemanger.manager.domain.budget.Budget;
+import com.project.expensemanger.manager.domain.budget.recommendation.vo.RecommendedBudgetResult;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -76,6 +79,7 @@ public class BudgetController implements BudgetControllerSpec {
                 .body(budgetMapper.toIdDto(updateBudget));
     }
 
+    @Override
     @DeleteMapping("/api/budget/{budgetId}")
     public ResponseEntity<Void> deleteBudget(
             @CurrentUser Long userId,
@@ -83,5 +87,13 @@ public class BudgetController implements BudgetControllerSpec {
     ) {
         budgetUseCase.deleteBudget(userId, budgetId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/api/budget/recommendation")
+    public ResponseEntity<List<RecommendBudgetResponse>> getRecommendBudget(
+            @RequestParam Long amount
+    ) {
+        List<RecommendedBudgetResult> recommendedBudgetResults = budgetUseCase.getRecommendBudgetByCategory(amount);
+        return ResponseEntity.ok().body(budgetMapper.toRecommendBudgetDto(recommendedBudgetResults));
     }
 }

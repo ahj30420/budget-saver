@@ -6,6 +6,10 @@ import com.project.expensemanger.manager.application.port.in.BudgetUseCase;
 import com.project.expensemanger.manager.application.port.out.BudgetPort;
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
 import com.project.expensemanger.manager.domain.budget.Budget;
+import com.project.expensemanger.manager.domain.budget.recommendation.RecommendationType;
+import com.project.expensemanger.manager.domain.budget.recommendation.vo.CategoryBudgetStat;
+import com.project.expensemanger.manager.domain.budget.recommendation.vo.RecommendedBudgetResult;
+import com.project.expensemanger.manager.domain.budget.recommendation.BudgetRecommendationContext;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,7 @@ public class BudgetService implements BudgetUseCase {
 
     private final BudgetPort budgetPort;
     private final CategoryPort categoryPort;
+    private final BudgetRecommendationContext recommendationContext;
 
     @Override
     public List<Long> registerBudget(Long userId, RegisterBudgetList requestDto) {
@@ -74,5 +79,12 @@ public class BudgetService implements BudgetUseCase {
     public void deleteBudget(Long userId, Long budgetId) {
         Budget budget = getBudget(userId, budgetId);
         budgetPort.delete(budget);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RecommendedBudgetResult> getRecommendBudgetByCategory(Long totalAmount) {
+        List<CategoryBudgetStat> stats  = budgetPort.findTotalBudgetByCategory();
+        return recommendationContext.recommend(totalAmount, stats);
     }
 }

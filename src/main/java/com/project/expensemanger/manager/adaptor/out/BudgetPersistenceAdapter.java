@@ -10,6 +10,7 @@ import com.project.expensemanger.manager.adaptor.out.jpa.user.UserJpaRepository;
 import com.project.expensemanger.manager.adaptor.out.jpa.user.entity.UserJpaEntity;
 import com.project.expensemanger.manager.application.port.out.BudgetPort;
 import com.project.expensemanger.manager.domain.budget.Budget;
+import com.project.expensemanger.manager.domain.budget.recommendation.vo.CategoryBudgetStat;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -78,5 +79,15 @@ public class BudgetPersistenceAdapter implements BudgetPort {
     private BudgetJpaEntity findByIdAndUserIdAndIsDeletedFalse(Long budgetId, Long userId) {
         return budgetJpaRepository.findByIdAndUserIdAndIsDeletedFalse(budgetId, userId)
                 .orElseThrow(() -> new BaseException(BudgetErrorCode.BUDGET_NOT_FOUND));
+    }
+
+    @Override
+    public List<CategoryBudgetStat> findTotalBudgetByCategory() {
+        return budgetJpaRepository.findTotalBudgetByCategory().stream()
+                .map(row -> new CategoryBudgetStat(
+                        row.categoryId(),
+                        row.categoryName(),
+                        row.totalBudgetAmount()
+                )).toList();
     }
 }

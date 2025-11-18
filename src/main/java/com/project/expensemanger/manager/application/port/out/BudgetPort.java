@@ -1,9 +1,7 @@
 package com.project.expensemanger.manager.application.port.out;
 
 import com.project.expensemanger.manager.domain.budget.Budget;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import com.project.expensemanger.manager.domain.budget.recommendation.vo.CategoryBudgetStat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,4 +17,6 @@ public interface BudgetPort {
     void update(Budget updateBudget);
 
     void delete(Budget budget);
+
+    List<CategoryBudgetStat> findTotalBudgetByCategory();
 }

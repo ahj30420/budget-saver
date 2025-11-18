@@ -1,9 +1,8 @@
 package com.project.expensemanger.manager.adaptor.out.jpa.budget;
 
+import com.project.expensemanger.manager.adaptor.out.jpa.budget.dto.CategoryBudgetSummaryDto;
 import com.project.expensemanger.manager.adaptor.out.jpa.budget.entity.BudgetJpaEntity;
-import com.project.expensemanger.manager.domain.budget.Budget;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,4 +28,14 @@ public interface BudgetJpaRepository extends JpaRepository<BudgetJpaEntity, Long
     Optional<BudgetJpaEntity> findByIdAndUserIdAndIsDeletedFalse(Long budgetId, Long userId);
 
     List<BudgetJpaEntity> findByUserIdAndIsDeletedFalse(Long userId);
+
+    @Query("""
+                    select new com.project.expensemanger.manager.adaptor.out.jpa.budget.dto.CategoryBudgetSummaryDto
+                    (b.category.id, b.category.name, sum(b.amount))
+                    from BudgetJpaEntity b
+                    where b.category.type = com.project.expensemanger.manager.adaptor.out.jpa.category.entity.CategoryKind.STANDARD
+                        and b.isDeleted = false
+                    group by b.category.id     
+            """)
+    List<CategoryBudgetSummaryDto> findTotalBudgetByCategory();
 }

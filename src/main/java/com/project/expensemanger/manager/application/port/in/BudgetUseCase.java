@@ -3,6 +3,8 @@ package com.project.expensemanger.manager.application.port.in;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudgetList;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateBudgetRequest;
 import com.project.expensemanger.manager.domain.budget.Budget;
+import com.project.expensemanger.manager.domain.budget.recommendation.RecommendationType;
+import com.project.expensemanger.manager.domain.budget.recommendation.vo.RecommendedBudgetResult;
 import jakarta.validation.Valid;
 import java.util.List;
 
@@ -16,4 +18,6 @@ public interface BudgetUseCase {
     Budget updateBudget(Long userId, Long budgetId, UpdateBudgetRequest requestDto);
 
     void deleteBudget(Long userId, Long budgetId);
+
+    List<RecommendedBudgetResult> getRecommendBudgetByCategory(Long amount);
 }
