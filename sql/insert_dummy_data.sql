@@ -14,7 +14,7 @@ BEGIN
         DECLARE i INT;
         SET i = 1;
 
-        WHILE i <= 10 DO
+        WHILE i <= 100 DO
               INSERT INTO user(email, name, password, role, is_deleted, created_at, updated_at)
               VALUES (CONCAT('test', i, '@naver.com'), CONCAT('test', i), '{noop}testpw1234', 'USER', false, NOW(), NOW());
 
@@ -29,7 +29,7 @@ BEGIN
         DECLARE i INT;
         SET i = 1;
 
-        WHILE i <= 10 DO
+        WHILE i <= 100 DO
               CALL loop_month(year, i);
               SET i = i + 1;
         END WHILE;
