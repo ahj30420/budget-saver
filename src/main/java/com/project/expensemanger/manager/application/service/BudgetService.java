@@ -1,5 +1,8 @@
 package com.project.expensemanger.manager.application.service;
 
+import static com.project.expensemanger.core.common.cache.CacheNames.AVERAGE_RATIO;
+import static com.project.expensemanger.core.common.cache.CacheNames.SUMMARY;
+
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudgetList;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateBudgetRequest;
 import com.project.expensemanger.manager.application.port.in.BudgetUseCase;
@@ -11,6 +14,7 @@ import com.project.expensemanger.manager.domain.budget.recommendation.vo.Categor
 import com.project.expensemanger.manager.domain.budget.recommendation.vo.RecommendedBudgetResult;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,7 +85,7 @@ public class BudgetService implements BudgetUseCase {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Cacheable(cacheNames = SUMMARY, key = "'" + AVERAGE_RATIO + "'")
     public List<RecommendedBudgetResult> getRecommendBudgetByCategory(Long totalAmount) {
         List<CategoryBudgetStat> stats = budgetPort.findTotalBudgetByCategory();
         return recommendationContext.recommend(totalAmount, stats);

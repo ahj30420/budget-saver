@@ -1,12 +1,14 @@
 package com.project.expensemanger.manager.domain.budget.recommendation.vo;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class RecommendedBudgetResult {
-    private final Long categoryId;
-    private final String categoryName;
-    private final Long recommendedAmount;
+    private Long categoryId;
+    private String categoryName;
+    private Long recommendedAmount;
 
     public RecommendedBudgetResult(Long categoryId, String categoryName, Long recommendedAmount) {
         this.categoryId = categoryId;
