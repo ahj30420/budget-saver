@@ -17,14 +17,6 @@ public interface UserControllerSpec {
             summary = "회원가입",
             description = "사용자로부터 회원가입 정보를 받아 회원을 등록합니다."
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "성공",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = com.project.expensemanger.core.common.response.ApiResponse.class)
-            )
-    )
     ResponseEntity<UserIdResponse> signup(
             @Parameter(description = "회원가입 요청 DTO", required = true)
             SignupRequest request
