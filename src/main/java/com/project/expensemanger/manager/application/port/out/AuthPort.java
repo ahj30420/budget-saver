@@ -4,4 +4,6 @@ public interface AuthPort {
     void saveRefreshToken(Long userId, String refreshToken);
 
     void deleteRefreshToken(Long userId);
+
+    String getRefreshToken(Long userId);
 }

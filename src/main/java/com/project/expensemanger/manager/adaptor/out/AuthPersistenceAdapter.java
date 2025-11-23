@@ -28,4 +28,9 @@ public class AuthPersistenceAdapter implements AuthPort {
     public void deleteRefreshToken(Long userId) {
         stringRedisTemplate.delete(RedisKeyGenerator.getRefreshTokenKey(userId));
     }
+
+    @Override
+    public String getRefreshToken(Long userId) {
+        return stringRedisTemplate.opsForValue().get(RedisKeyGenerator.getRefreshTokenKey(userId));
+    }
 }
