@@ -16,4 +16,8 @@ public class AuthService implements AuthUseCase {
         authPort.saveRefreshToken(userId, refreshToken);
     }
 
+    @Override
+    public void delete(Long userId) {
+        authPort.deleteRefreshToken(userId);
+    }
 }
