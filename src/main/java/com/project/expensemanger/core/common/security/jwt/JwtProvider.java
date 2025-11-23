@@ -40,6 +40,18 @@ public class JwtProvider {
                 .compact();
     }
 
+    public String generateRefreshToken(String email, Long userId) {
+        long now = new Date().getTime();
+
+        return Jwts.builder()
+                .subject(email)
+                .claim("id", userId)
+                .issuedAt(new Date(now))
+                .expiration(new Date(now + jwtProperties.getRefreshExpirationTime()))
+                .signWith(key)
+                .compact();
+    }
+
     public Claims getClaims(String token) {
         return Jwts.parser()
                 .verifyWith(key)
