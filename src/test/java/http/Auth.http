@@ -1,0 +1,3 @@
+### 토큰 갱신
+POST http://localhost:8080/api/reissue
+Content-Type: application/json
