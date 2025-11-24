@@ -1,9 +1,12 @@
 package com.project.expensemanger.manager.domain.category;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
     private Long id;
     private String name;
