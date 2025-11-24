@@ -8,7 +8,6 @@ Content-Type: application/json
   "name": "test11"
 }
 
-
 ### 로그인
 POST http://localhost:8080/api/login
 Content-Type: application/json
@@ -17,10 +16,6 @@ Content-Type: application/json
   "email": "ahj30420@naver.com",
   "password": "testpw1234"
 }
-
-### 로그아웃
-POST http://localhost:8080/api/logout
-Content-Type: application/json
 
 > {%
     const authHeader = response.headers.valueOf("Authorization");
@@ -33,3 +28,7 @@ Content-Type: application/json
         console.error("Authorization 헤더가 존재하지 않거나 형식이 올바르지 않습니다.");
     }
 %}
+
+### 로그아웃
+POST http://localhost:8080/api/logout
+Content-Type: application/json

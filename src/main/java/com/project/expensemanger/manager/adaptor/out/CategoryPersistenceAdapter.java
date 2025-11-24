@@ -7,6 +7,7 @@ import com.project.expensemanger.manager.adaptor.out.jpa.category.entity.Categor
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
 import com.project.expensemanger.manager.domain.category.Category;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -41,6 +42,6 @@ public class CategoryPersistenceAdapter implements CategoryPort {
     public List<Category> findAllByType() {
         return categoryJpaRepository.findAllByType().stream()
                 .map(CategoryJpaEntity::toDomain)
-                .toList();
+                .collect(Collectors.toList());
     }
 }
