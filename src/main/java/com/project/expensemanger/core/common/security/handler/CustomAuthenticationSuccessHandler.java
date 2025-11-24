@@ -1,6 +1,5 @@
 package com.project.expensemanger.core.common.security.handler;
 
-import com.project.expensemanger.core.common.security.jwt.JwtProperties;
 import com.project.expensemanger.core.common.security.jwt.JwtProvider;
 import com.project.expensemanger.core.common.security.vo.CustomUserDetails;
 import com.project.expensemanger.core.common.util.ResponseUtil;
@@ -20,7 +19,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     private final ResponseUtil responseUtil;
     private final JwtProvider jwtProvider;
-    private final JwtProperties jwtProperties;
     private final AuthUseCase authUseCase;
 
     @Override
