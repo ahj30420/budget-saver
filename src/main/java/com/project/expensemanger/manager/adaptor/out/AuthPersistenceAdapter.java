@@ -1,36 +1,35 @@
 package com.project.expensemanger.manager.adaptor.out;
 
 import com.project.expensemanger.core.common.cache.RedisKeyGenerator;
+import com.project.expensemanger.core.common.security.jwt.JwtProperties;
+import com.project.expensemanger.manager.adaptor.out.redis.RedisRepository;
 import com.project.expensemanger.manager.application.port.out.AuthPort;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
 public class AuthPersistenceAdapter implements AuthPort {
 
-    @Value("${spring.jwt.refresh-expiration-time}")
-    private int refreshExpirationTime;
-
-    private final StringRedisTemplate stringRedisTemplate;
+    private final JwtProperties jwtProperties;
+    private final RedisRepository redisRepository;
 
     @Override
     public void saveRefreshToken(Long userId, String refreshToken) {
         String key = RedisKeyGenerator.getRefreshTokenKey(userId);
-        stringRedisTemplate.opsForValue()
-                .set(key, refreshToken, refreshExpirationTime, TimeUnit.MILLISECONDS);
+        redisRepository.save(key, refreshToken, jwtProperties.refreshExpirationTime, TimeUnit.SECONDS);
     }
 
     @Override
     public void deleteRefreshToken(Long userId) {
-        stringRedisTemplate.delete(RedisKeyGenerator.getRefreshTokenKey(userId));
+        String key = RedisKeyGenerator.getRefreshTokenKey(userId);
+        redisRepository.delete(key);
     }
 
     @Override
     public String getRefreshToken(Long userId) {
-        return stringRedisTemplate.opsForValue().get(RedisKeyGenerator.getRefreshTokenKey(userId));
+        String key = RedisKeyGenerator.getRefreshTokenKey(userId);
+        return redisRepository.findByKey(key);
     }
 }
