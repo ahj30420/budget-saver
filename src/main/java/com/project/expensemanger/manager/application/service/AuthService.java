@@ -42,21 +42,15 @@ public class AuthService implements AuthUseCase {
     @Override
     public void reissue(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String preToken = cookieUtils.extractRefreshToken(request);
-
-            if (preToken == null) {
-                throw new BaseException(AuthErrorCode.INVALID_REFRESH_TOKEN);
-            }
+            String preToken = extractRefreshTokenOrThrow(request);
 
             User user = getUserBySubject(preToken);
-
             verifyRefreshToken(user, preToken);
 
             String newRefresh = generateRefreshToken(user.getEmail(), user.getId());
             String newAccess = generateAccessToken(user);
 
             updateRefreshToken(user, newRefresh);
-
             responseUtil.addTokensToResponse(response, newAccess, newRefresh);
         } catch (ExpiredJwtException ee) {
             throw new BaseException(AuthErrorCode.ACCESS_TOKEN_EXPIRED);
@@ -65,6 +59,14 @@ public class AuthService implements AuthUseCase {
         } catch (JwtException je) {
             throw new BaseException(AuthErrorCode.UNAUTHENTICATED);
         }
+    }
+
+    private String extractRefreshTokenOrThrow(HttpServletRequest request) {
+        String token = cookieUtils.extractRefreshToken(request);
+        if (token == null) {
+            throw new BaseException(AuthErrorCode.INVALID_REFRESH_TOKEN);
+        }
+        return token;
     }
 
     private User getUserBySubject(String refreshToken) {
