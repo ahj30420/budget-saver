@@ -1,20 +1,29 @@
 package com.project.expensemanger.core.common.security.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.expensemanger.core.common.exception.errorcode.AuthErrorCode;
+import com.project.expensemanger.core.common.security.config.AuthTestConfig;
 import com.project.expensemanger.core.common.security.dto.LoginRequest;
 import com.project.expensemanger.core.common.security.jwt.JwtProperties;
+import com.project.expensemanger.core.common.security.jwt.JwtProvider;
+import com.project.expensemanger.core.common.util.CookieUtils;
+import com.project.expensemanger.core.config.SecurityConfig;
+import com.project.expensemanger.manager.adaptor.in.api.AuthController;
 import com.project.expensemanger.manager.application.mock.UserMock;
+import com.project.expensemanger.manager.application.port.out.AuthPort;
 import com.project.expensemanger.manager.application.port.out.UserPort;
 import com.project.expensemanger.manager.domain.User.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -23,17 +32,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@SpringBootTest
+@WebMvcTest(AuthController.class)
+@Import({AuthTestConfig.class, SecurityConfig.class, UserMock.class})
 @AutoConfigureMockMvc
 public class AuthControllerTest {
 
@@ -46,11 +56,20 @@ public class AuthControllerTest {
     @Autowired
     JwtProperties jwtProperties;
 
-    @MockitoBean
+    @Autowired
+    JwtProvider jwtProvider;
+
+    @Autowired
     UserPort userPort;
 
     @Autowired
+    AuthPort authPort;
+
+    @Autowired
     UserMock userMock;
+
+    @Autowired
+    CookieUtils cookieUtils;
 
     @Test
     @DisplayName("로그인 테스트 : 성공")
@@ -96,6 +115,70 @@ public class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("토큰 갱신 테스트 : 성공")
+    void reissue_success_test() throws Exception {
+        // given
+        User mockUser = userMock.domainMock();
+        String preRefreshToken = jwtProvider.generateRefreshToken(mockUser.getEmail(), mockUser.getId());
+        given(userPort.findByEmail(anyString())).willReturn(mockUser);
+        given(authPort.getRefreshToken(anyLong())).willReturn(preRefreshToken);
+        willDoNothing().given(authPort).saveRefreshToken(anyLong(), anyString());
+
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/reissue")
+                        .cookie(createCookie(preRefreshToken))
+        );
+
+        // then
+        perform
+                .andExpect(status().isNoContent())
+                .andExpect(MockMvcResultMatchers.cookie().exists("refresh_token"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
+
+    @Test
+    @DisplayName("토큰 갱신 테스트 : 실패 [쿠키에 refresh_token 없을 경우]")
+    void reissue_failure_when_cookie_not_exist() throws Exception {
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/reissue")
+        );
+
+        // then
+        perform
+                .andExpect(status().isUnauthorized())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("ERROR"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.message")
+                        .value(AuthErrorCode.INVALID_REFRESH_TOKEN.getMessage()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
+
+    @Test
+    @DisplayName("토큰 갱신 테스트 : 실패 [저장된 refresh_token 데이터가 없을 경우]")
+    void reissue_failure_when_refresh_token_not_exist_() throws Exception {
+        // given
+        User mockUser = userMock.domainMock();
+        String preRefreshToken = jwtProvider.generateRefreshToken(mockUser.getEmail(), mockUser.getId());
+        given(userPort.findByEmail(anyString())).willReturn(mockUser);
+        given(authPort.getRefreshToken(anyLong())).willReturn(null);
+
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/reissue")
+        );
+
+        // then
+        perform
+                .andExpect(status().isUnauthorized())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("ERROR"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.message")
+                        .value(AuthErrorCode.INVALID_REFRESH_TOKEN.getMessage()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
+
+    @Test
     @DisplayName("토큰 시간 초과 : 만료")
     void token_expire_test() throws Exception {
         // given
@@ -134,6 +217,10 @@ public class AuthControllerTest {
                         MockMvcResultMatchers.jsonPath("$.body.message")
                                 .value(AuthErrorCode.INVALID_SIGNATURE_ACCESS_TOKEN.getMessage()));
 
+    }
+
+    private Cookie createCookie(String refreshToken) {
+        return cookieUtils.createRefreshTokenCookie(refreshToken);
     }
 
     private String generateAccessToken(String subject, Long id,
