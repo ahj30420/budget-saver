@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(BudgetController.class)
-@Import({SecurityConfig.class, AuthTestConfig.class, JacksonConfig.class, BudgetUseCase.class, BudgetMapper.class, BudgetMock.class})
+@Import({SecurityConfig.class, AuthTestConfig.class, BudgetUseCase.class, BudgetMapper.class, BudgetMock.class})
 @AutoConfigureMockMvc
 class BudgetControllerTest {
 

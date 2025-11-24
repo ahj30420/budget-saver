@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.expensemanger.core.common.exception.errorcode.AuthErrorCode;
 import com.project.expensemanger.core.common.response.ApiResponse;
 import com.project.expensemanger.core.common.response.ErrorResponse;
+import com.project.expensemanger.core.common.security.jwt.JwtProperties;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Component;
 public class ResponseUtil {
 
     private final ObjectMapper objectMapper;
+    private final CookieUtils cookieUtils;
+    private final JwtProperties jwtProperties;
 
     public void writeJsonSuccessResponse(HttpServletResponse response) throws IOException {
         ApiResponse<Void> body = createSuccessBody();
@@ -53,5 +58,11 @@ public class ResponseUtil {
                 .status("ERROR")
                 .body(errorBody)
                 .build();
+    }
+
+    public void addTokensToResponse(HttpServletResponse response, String accessToken, String refreshToken) {
+        Cookie refreshTokenCookie = cookieUtils.createRefreshTokenCookie(refreshToken);
+        response.addCookie(refreshTokenCookie);
+        response.addHeader(HttpHeaders.AUTHORIZATION, jwtProperties.getTokenPrefix() + accessToken);
     }
 }

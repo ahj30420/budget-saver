@@ -18,6 +18,10 @@ Content-Type: application/json
   "password": "testpw1234"
 }
 
+### 로그아웃
+POST http://localhost:8080/api/logout
+Content-Type: application/json
+
 > {%
     const authHeader = response.headers.valueOf("Authorization");
 

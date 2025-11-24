@@ -6,4 +6,7 @@ public class RedisKeyGenerator {
 
     public static String getCategorySummaryKey() { return SUMMARY; }
 
+    public static String getRefreshTokenKey(Long userId) {
+        return REFRESH_TOKEN + SEPARATOR + userId;
+    }
 }

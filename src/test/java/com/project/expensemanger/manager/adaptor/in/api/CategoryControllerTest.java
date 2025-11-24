@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(CategoryController.class)
-@Import({SecurityConfig.class, AuthTestConfig.class, JacksonConfig.class, CategoryUseCase.class, CategoryMock.class, CategoryMapper.class})
+@Import({SecurityConfig.class, AuthTestConfig.class, CategoryUseCase.class, CategoryMock.class, CategoryMapper.class})
 @AutoConfigureMockMvc
 class CategoryControllerTest {
 
@@ -46,7 +46,7 @@ class CategoryControllerTest {
 
     @Test
     @DisplayName("카테고리 관리자 등록 : 성공")
-    @WithMockUser(roles = "USER")
+    @WithMockUser(roles = "ADMIN")
     void register_standard_category_success_test() throws Exception {
         // given
         RegisterCategoryRequest request = categoryMock.standardRegisterRequestDto();
@@ -123,7 +123,7 @@ class CategoryControllerTest {
 
         // when
         ResultActions perform = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/categories"));
+                MockMvcRequestBuilders.get("/api/category/list"));
 
         // then
         perform
