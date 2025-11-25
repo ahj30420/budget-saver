@@ -1,4 +1,4 @@
-package com.project.expensemanger.manager.adaptor.out.jpa.budget.dto;
+package com.project.expensemanger.manager.adaptor.out.jpa.budget.projection;
 
 public record CategoryBudgetSummaryDto(
         Long categoryId,

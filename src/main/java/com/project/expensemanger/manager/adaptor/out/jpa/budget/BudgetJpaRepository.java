@@ -1,6 +1,6 @@
 package com.project.expensemanger.manager.adaptor.out.jpa.budget;
 
-import com.project.expensemanger.manager.adaptor.out.jpa.budget.dto.CategoryBudgetSummaryDto;
+import com.project.expensemanger.manager.adaptor.out.jpa.budget.projection.CategoryBudgetSummaryDto;
 import com.project.expensemanger.manager.adaptor.out.jpa.budget.entity.BudgetJpaEntity;
 import java.time.LocalDate;
 import java.util.List;
@@ -30,7 +30,7 @@ public interface BudgetJpaRepository extends JpaRepository<BudgetJpaEntity, Long
     List<BudgetJpaEntity> findByUserIdAndIsDeletedFalse(Long userId);
 
     @Query("""
-                    select new com.project.expensemanger.manager.adaptor.out.jpa.budget.dto.CategoryBudgetSummaryDto
+                    select new com.project.expensemanger.manager.adaptor.out.jpa.budget.projection.CategoryBudgetSummaryDto
                     (b.category.id, b.category.name, sum(b.amount))
                     from BudgetJpaEntity b
                     where b.category.type = com.project.expensemanger.manager.adaptor.out.jpa.category.entity.CategoryKind.STANDARD

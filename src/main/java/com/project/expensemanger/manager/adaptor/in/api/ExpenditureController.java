@@ -4,9 +4,11 @@ import com.project.expensemanger.core.common.annotation.CurrentUser;
 import com.project.expensemanger.core.common.util.UrlCreator;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
+import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureDetailsResponse;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureIdResponse;
 import com.project.expensemanger.manager.adaptor.in.api.mapper.ExpenditureMapper;
 import com.project.expensemanger.manager.adaptor.in.api.spec.ExpenditureControllerSpec;
+import com.project.expensemanger.manager.application.model.ExpenditureDetailView;
 import com.project.expensemanger.manager.application.port.in.ExpenditureUseCase;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import jakarta.validation.Valid;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +53,7 @@ public class ExpenditureController implements ExpenditureControllerSpec {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PatchMapping("/api/expenditure/{expenditureId}")
     public ResponseEntity<ExpenditureIdResponse> updateExpenditure(
             @CurrentUser Long userId,
@@ -63,4 +67,13 @@ public class ExpenditureController implements ExpenditureControllerSpec {
                 .body(mapper.toIdDto(updateExpenditure.getId()));
     }
 
+    @Override
+    @GetMapping("/api/expenditure/{expenditureId}")
+    public ResponseEntity<ExpenditureDetailsResponse> getExpenditure(
+            @CurrentUser Long userId,
+            @PathVariable("expenditureId") Long expenditureId
+    ) {
+        ExpenditureDetailView expenditureDetails = useCase.getExpenditureDetails(userId, expenditureId);
+        return ResponseEntity.ok(mapper.toExpenditureDetailsDto(expenditureDetails));
+    }
 }

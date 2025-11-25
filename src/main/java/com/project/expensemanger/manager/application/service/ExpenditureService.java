@@ -4,6 +4,7 @@ import com.project.expensemanger.core.common.exception.BaseException;
 import com.project.expensemanger.core.common.exception.errorcode.ExpenditureErrorCode;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
+import com.project.expensemanger.manager.application.model.ExpenditureDetailView;
 import com.project.expensemanger.manager.application.port.in.ExpenditureUseCase;
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
 import com.project.expensemanger.manager.application.port.out.ExpenditurePort;
@@ -75,5 +76,16 @@ public class ExpenditureService implements ExpenditureUseCase {
         );
 
         expenditure.update(cmd);
+    }
+
+    @Override
+    public ExpenditureDetailView getExpenditureDetails(Long userId, Long expenditureId) {
+        ExpenditureDetailView detail = expenditurePort.getDetails(expenditureId);
+
+        if (!detail.userId().equals(userId)) {
+            throw new BaseException(ExpenditureErrorCode.EXPENDITURE_FORBIDDEN);
+        }
+
+        return detail;
     }
 }
