@@ -1,0 +1,11 @@
+### 카테고리 등록
+POST http://localhost:8080/api/expenditure
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "categoryId" : 2,
+  "amount" : 1000,
+  "spentAt" : "2025-11-25 15:12:30",
+  "memo" : "테스트"
+}
