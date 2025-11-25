@@ -146,7 +146,7 @@ public class ExpenditureMock {
         );
     }
 
-    public ExpenditureDetailModel ExpenditureDetailModel() {
+    public ExpenditureDetailModel expenditureDetailModel() {
         return new ExpenditureDetailModel(
                 id,
                 userId,

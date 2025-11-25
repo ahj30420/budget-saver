@@ -13,6 +13,7 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpe
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
 import com.project.expensemanger.manager.adaptor.in.api.mapper.ExpenditureMapper;
 import com.project.expensemanger.manager.application.mock.ExpenditureMock;
+import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.application.port.in.ExpenditureUseCase;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import org.junit.jupiter.api.DisplayName;
@@ -112,6 +113,26 @@ class ExpenditureControllerTest {
         // then
         perform
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
+
+    @Test
+    @DisplayName("지출 상세 정보 조회 테스트 : 성공")
+    @MockCustomUser
+    void expenditure_get_details_success_test() throws Exception {
+        // given
+        ExpenditureDetailModel expenditureDetailModel = expenditureMock.expenditureDetailModel();
+
+        given(expenditureUseCase.getExpenditureDetails(anyLong(), anyLong())).willReturn(expenditureDetailModel);
+
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/expenditure" + "/{expenditureId}", 1L));
+
+        // then
+        perform
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
     }

@@ -205,7 +205,7 @@ class ExpenditureServiceTest {
         // given
         Long userId = expenditureMock.getUserId();
         Long expenditureId = expenditureMock.getId();
-        ExpenditureDetailModel expenditureDetailModel = expenditureMock.ExpenditureDetailModel();
+        ExpenditureDetailModel expenditureDetailModel = expenditureMock.expenditureDetailModel();
 
         given(expenditurePort.getDetails(anyLong())).willReturn(expenditureDetailModel);
 
@@ -222,7 +222,7 @@ class ExpenditureServiceTest {
         // given
         Long otherUserId = expenditureMock.getOtherUserId();
         Long expenditureId = expenditureMock.getId();
-        ExpenditureDetailModel expenditureDetailModel = expenditureMock.ExpenditureDetailModel();
+        ExpenditureDetailModel expenditureDetailModel = expenditureMock.expenditureDetailModel();
 
         given(expenditurePort.getDetails(anyLong())).willReturn(expenditureDetailModel);
 
