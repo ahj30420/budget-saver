@@ -2,6 +2,7 @@ package com.project.expensemanger.manager.application.mock;
 
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
+import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import com.project.expensemanger.manager.domain.expenditure.ExpenditureUpdateCommand;
 import java.time.LocalDateTime;
@@ -32,6 +33,7 @@ public class ExpenditureMock {
     private final Long negativeCategoryId = -1L;
 
     private final Long userId = 1L;
+    private final Long otherUserId = 2L;
 
     public Expenditure domainMock() {
         return Expenditure.builder()
@@ -144,11 +146,27 @@ public class ExpenditureMock {
         );
     }
 
+    public ExpenditureDetailModel ExpenditureDetailModel() {
+        return new ExpenditureDetailModel(
+                id,
+                userId,
+                spentAt,
+                amount,
+                memo,
+                categoryId,
+                "카테고리 이름"
+        );
+    }
+
     public Long getId() {
         return id;
     }
 
     public Long getUserId() {
         return userId;
+    }
+
+    public Long getOtherUserId() {
+        return otherUserId;
     }
 }

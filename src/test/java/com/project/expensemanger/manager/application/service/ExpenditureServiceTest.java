@@ -18,6 +18,7 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpe
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
 import com.project.expensemanger.manager.application.mock.CategoryMock;
 import com.project.expensemanger.manager.application.mock.ExpenditureMock;
+import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
 import com.project.expensemanger.manager.application.port.out.ExpenditurePort;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
@@ -114,7 +115,7 @@ class ExpenditureServiceTest {
     @DisplayName("지출 삭제 테스트 : 실패 [해당 사용자가 아닐 경우]")
     void expenditure_delete_fail_when_user_is_not_owner() throws Exception {
         // given
-        Long otherUserId = 2L;
+        Long otherUserId = expenditureMock.getOtherUserId();
         Long expenditureId = expenditureMock.getId();
         Expenditure expenditure = expenditureMock.domainMock();
 
@@ -186,7 +187,7 @@ class ExpenditureServiceTest {
     @DisplayName("지출 수정 테스트 : 실패 [해당 사용자가 아닐 경우]")
     void expenditure_update_fail_when_user_is_not_owner() throws Exception {
         // given
-        Long otherUserId = 2L;
+        Long otherUserId = expenditureMock.getOtherUserId();
         Long expenditureId = expenditureMock.getId();
         UpdateExpenditureRequest requestDto = expenditureMock.updateRequestDto();
 
@@ -194,6 +195,39 @@ class ExpenditureServiceTest {
 
         // when & then
         assertThatThrownBy(() -> sut.updateExpenditure(otherUserId, expenditureId, requestDto))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(ExpenditureErrorCode.EXPENDITURE_FORBIDDEN.getMessage());
+    }
+
+    @Test
+    @DisplayName("지출 상세 정보 조회 테스트 : 성공")
+    void expenditure_get_details_succes() throws Exception {
+        // given
+        Long userId = expenditureMock.getUserId();
+        Long expenditureId = expenditureMock.getId();
+        ExpenditureDetailModel expenditureDetailModel = expenditureMock.ExpenditureDetailModel();
+
+        given(expenditurePort.getDetails(anyLong())).willReturn(expenditureDetailModel);
+
+        // when
+        ExpenditureDetailModel result = sut.getExpenditureDetails(userId, expenditureId);
+
+        // then
+        assertThat(result).isEqualTo(expenditureDetailModel);
+    }
+
+    @Test
+    @DisplayName("지출 상세 정보 조회 테스트 : 실패 [해당 사용자가 아닐 경우]")
+    void expenditure_get_details_fail_when_user_is_not_owner() throws Exception {
+        // given
+        Long otherUserId = expenditureMock.getOtherUserId();
+        Long expenditureId = expenditureMock.getId();
+        ExpenditureDetailModel expenditureDetailModel = expenditureMock.ExpenditureDetailModel();
+
+        given(expenditurePort.getDetails(anyLong())).willReturn(expenditureDetailModel);
+
+        // when & then
+        assertThatThrownBy(() -> sut.getExpenditureDetails(otherUserId, expenditureId))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(ExpenditureErrorCode.EXPENDITURE_FORBIDDEN.getMessage());
     }
