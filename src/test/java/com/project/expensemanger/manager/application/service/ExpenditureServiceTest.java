@@ -6,11 +6,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doThrow;
 
 import com.project.expensemanger.core.common.exception.BaseException;
 import com.project.expensemanger.core.common.exception.errorcode.CategoryErrorCode;
+import com.project.expensemanger.core.common.exception.errorcode.ExpenditureErrorCode;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
+import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
 import com.project.expensemanger.manager.application.mock.CategoryMock;
 import com.project.expensemanger.manager.application.mock.ExpenditureMock;
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
@@ -43,9 +46,9 @@ class ExpenditureServiceTest {
     @DisplayName("지출 등록 테스트 : 성공")
     void expenditure_save_success_test() throws Exception {
         // given
-        Long userId = expenditureMock.getId();
+        Long userId = expenditureMock.getUserId();
         RegisterExpenditure registerExpenditure = expenditureMock.RegisterRequestDto();
-        Expenditure expenditure = expenditureMock.toDomain();
+        Expenditure expenditure = expenditureMock.domainMock();
 
         given(categoryPort.findById(anyLong())).willReturn(categoryMock.standardDomainMock());
         given(expenditurePort.save(any(Expenditure.class))).willReturn(expenditure);
@@ -61,7 +64,7 @@ class ExpenditureServiceTest {
     @DisplayName("지출 등록 테스트 : 실패 [카테고리가 존재하지 않을 경우]")
     void expenditure_save_failure_when_category_not_exist() throws Exception {
         // given
-        Long userId = expenditureMock.getId();
+        Long userId = expenditureMock.getUserId();
         RegisterExpenditure registerExpenditure = expenditureMock.RegisterRequestDto();
 
         doThrow(new BaseException(CategoryErrorCode.CATEGORY_NOT_FOUND)).when(categoryPort).findById(anyLong());
@@ -70,5 +73,77 @@ class ExpenditureServiceTest {
         assertThatThrownBy(() -> sut.registerExpenditure(userId, registerExpenditure))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(CategoryErrorCode.CATEGORY_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("지출 수정 테스트 : 성공")
+    void expenditure_update_success_test() throws Exception {
+        // given
+        Long userId = expenditureMock.getUserId();
+        Long expenditureId = expenditureMock.getId();
+        UpdateExpenditureRequest requestDto = expenditureMock.updateRequestDto();
+
+        given(expenditurePort.findById(anyLong())).willReturn(expenditureMock.domainMock());
+        willDoNothing().given(expenditurePort).update(any(Expenditure.class));
+
+        // when
+        Expenditure changedExpenditure = sut.updateExpenditure(userId, expenditureId, requestDto);
+
+        // then
+        assertThat(changedExpenditure.getAmount()).isEqualTo(requestDto.amount());
+        assertThat(changedExpenditure.getSpentAt()).isEqualTo(requestDto.spentAt());
+        assertThat(changedExpenditure.getMemo()).isEqualTo(requestDto.memo());
+        assertThat(changedExpenditure.getCategoryId()).isEqualTo(requestDto.categoryId());
+        assertThat(changedExpenditure.isExcludedFromTotal()).isEqualTo(requestDto.excludedFromTotal());
+    }
+
+    @Test
+    @DisplayName("지출 수정 테스트 : 실패[해당 지출이 조회되지 않을 경우]")
+    void expenditure_update_fail_when_expenditure_not_exist() throws Exception {
+        // given
+        Long userId = expenditureMock.getUserId();
+        Long expenditureId = expenditureMock.getId();
+        UpdateExpenditureRequest requestDto = expenditureMock.updateRequestDto();
+
+        doThrow(new BaseException(ExpenditureErrorCode.EXPENDITURE_NOT_FOUND))
+                .when(expenditurePort)
+                .findById(anyLong());
+
+        // when & then
+        assertThatThrownBy(() -> sut.updateExpenditure(userId, expenditureId, requestDto))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(ExpenditureErrorCode.EXPENDITURE_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("지출 수정 테스트 : 실패 [카테고리가 존재하지 않을 경우]")
+    void expenditure_update_fail_when_category_not_exist() throws Exception {
+        // given
+        Long userId = expenditureMock.getUserId();
+        Long expenditureId = expenditureMock.getId();
+        UpdateExpenditureRequest requestDto = expenditureMock.updateRequestDto();
+
+        doThrow(new BaseException(CategoryErrorCode.CATEGORY_NOT_FOUND)).when(categoryPort).findById(anyLong());
+
+        // when & then
+        assertThatThrownBy(() -> sut.updateExpenditure(userId, expenditureId, requestDto))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(CategoryErrorCode.CATEGORY_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("지출 수정 테스트 : 실패 [해당 사용자가 아닐 경우]")
+    void expenditure_update_fail_when_() throws Exception {
+        // given
+        Long otherUserId = 2L;
+        Long expenditureId = expenditureMock.getId();
+        UpdateExpenditureRequest requestDto = expenditureMock.updateRequestDto();
+
+        given(expenditurePort.findById(anyLong())).willReturn(expenditureMock.domainMock());
+
+        // when & then
+        assertThatThrownBy(() -> sut.updateExpenditure(otherUserId, expenditureId, requestDto))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(ExpenditureErrorCode.EXPENDITURE_FORBIDDEN.getMessage());
     }
 }

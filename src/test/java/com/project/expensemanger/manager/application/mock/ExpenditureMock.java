@@ -1,6 +1,7 @@
 package com.project.expensemanger.manager.application.mock;
 
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
+import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import com.project.expensemanger.manager.domain.expenditure.ExpenditureUpdateCommand;
 import java.time.LocalDateTime;
@@ -53,7 +54,17 @@ public class ExpenditureMock {
         );
     }
 
-    public ExpenditureUpdateCommand UpdateRequestCommand() {
+    public UpdateExpenditureRequest updateRequestDto() {
+        return new UpdateExpenditureRequest(
+                changedAmount,
+                changedSpendAt,
+                changedMemo,
+                changedExcludedFromTotal,
+                changedCategoryId
+        );
+    }
+
+    public ExpenditureUpdateCommand updateRequestCommand() {
         return new ExpenditureUpdateCommand(
                 changedAmount,
                 changedSpendAt,
@@ -135,5 +146,9 @@ public class ExpenditureMock {
 
     public Long getId() {
         return id;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

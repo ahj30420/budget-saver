@@ -24,7 +24,7 @@ class ExpenditureTest {
     @DisplayName("지출 수정 테스트 : 성공")
     void update_expenditure_success_test() throws Exception {
         // given
-        ExpenditureUpdateCommand command = expenditureMock.UpdateRequestCommand();
+        ExpenditureUpdateCommand command = expenditureMock.updateRequestCommand();
 
         // when
         expenditure.update(command);
