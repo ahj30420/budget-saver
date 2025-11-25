@@ -8,6 +8,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.project.expensemanger.core.common.exception.BaseException;
 import com.project.expensemanger.core.common.exception.errorcode.CategoryErrorCode;
@@ -76,6 +78,55 @@ class ExpenditureServiceTest {
     }
 
     @Test
+    @DisplayName("지출 삭제 테스트 : 성공")
+    void expenditure_delete_succes_test() throws Exception {
+        // given
+        Expenditure expenditure = expenditureMock.domainMock();
+
+        given(expenditurePort.findById(any(Long.class))).willReturn(expenditure);
+        willDoNothing().given(expenditurePort).delete(any(Expenditure.class));
+
+        // when
+        sut.deleteExpenditure(expenditure.getUserId(), expenditure.getId());
+
+        // then
+        verify(expenditurePort, times(1)).delete(any(Expenditure.class));
+    }
+
+    @Test
+    @DisplayName("지출 삭제 테스트 : 실패[해당 지출을 찾지 못했을 경우]")
+    void expenditure_delete_fail_when_expenditure_not_exist() throws Exception {
+        // given
+        Long userId = expenditureMock.getUserId();
+        Long expenditureId = expenditureMock.getId();
+
+        doThrow(new BaseException(ExpenditureErrorCode.EXPENDITURE_NOT_FOUND))
+                .when(expenditurePort)
+                .findById(anyLong());
+
+        // when & then
+        assertThatThrownBy(() -> sut.deleteExpenditure(userId, expenditureId))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(ExpenditureErrorCode.EXPENDITURE_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("지출 삭제 테스트 : 실패 [해당 사용자가 아닐 경우]")
+    void expenditure_delete_fail_when_user_is_not_owner() throws Exception {
+        // given
+        Long otherUserId = 2L;
+        Long expenditureId = expenditureMock.getId();
+        Expenditure expenditure = expenditureMock.domainMock();
+
+        given(expenditurePort.findById(any(Long.class))).willReturn(expenditure);
+
+        // when & then
+        assertThatThrownBy(() -> sut.deleteExpenditure(otherUserId, expenditureId))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(ExpenditureErrorCode.EXPENDITURE_FORBIDDEN.getMessage());
+    }
+
+    @Test
     @DisplayName("지출 수정 테스트 : 성공")
     void expenditure_update_success_test() throws Exception {
         // given
@@ -133,7 +184,7 @@ class ExpenditureServiceTest {
 
     @Test
     @DisplayName("지출 수정 테스트 : 실패 [해당 사용자가 아닐 경우]")
-    void expenditure_update_fail_when_() throws Exception {
+    void expenditure_update_fail_when_user_is_not_owner() throws Exception {
         // given
         Long otherUserId = 2L;
         Long expenditureId = expenditureMock.getId();
