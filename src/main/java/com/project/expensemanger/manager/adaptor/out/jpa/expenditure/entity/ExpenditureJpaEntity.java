@@ -81,4 +81,12 @@ public class ExpenditureJpaEntity extends BaseDateTime {
     public void delete() {
         this.isDeleted = true;
     }
+
+    public void updateFromDomain(Expenditure updateExpenditure, CategoryJpaEntity category) {
+        this.amount = updateExpenditure.getAmount();
+        this.spendAt = updateExpenditure.getSpentAt();
+        this.memo = updateExpenditure.getMemo();
+        this.excludedFromTotal = updateExpenditure.isExcludedFromTotal();
+        this.category = category;
+    }
 }

@@ -1,21 +1,19 @@
 package com.project.expensemanger.manager.adaptor.in.api.dto.request;
 
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
-public record RegisterExpenditure(
-        @NotNull
-        @Positive
-        Long categoryId,
-
-        @NotNull
+public record UpdateExpenditureRequest(
         @Positive
         Long amount,
 
-        @NotNull
         LocalDateTime spentAt,
 
-        String memo
+        String memo,
+
+        boolean excludedFromTotal,
+
+        @Positive
+        Long categoryId
 ) {
 }

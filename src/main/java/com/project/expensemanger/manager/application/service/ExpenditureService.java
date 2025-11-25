@@ -3,10 +3,12 @@ package com.project.expensemanger.manager.application.service;
 import com.project.expensemanger.core.common.exception.BaseException;
 import com.project.expensemanger.core.common.exception.errorcode.ExpenditureErrorCode;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
+import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
 import com.project.expensemanger.manager.application.port.in.ExpenditureUseCase;
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
 import com.project.expensemanger.manager.application.port.out.ExpenditurePort;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
+import com.project.expensemanger.manager.domain.expenditure.ExpenditureUpdateCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,5 +52,28 @@ public class ExpenditureService implements ExpenditureUseCase {
         if (!expenditure.getUserId().equals(userId)) {
             throw new BaseException(ExpenditureErrorCode.EXPENDITURE_FORBIDDEN);
         }
+    }
+
+    @Override
+    @Transactional
+    public Expenditure updateExpenditure(Long userId, Long expenditureId, UpdateExpenditureRequest requestDto) {
+        Expenditure expenditure = expenditurePort.findById(expenditureId);
+        validateCategory(requestDto.categoryId());
+        validateOwner(userId, expenditure);
+        update(expenditure, requestDto);
+        expenditurePort.update(expenditure);
+        return expenditure;
+    }
+
+    private void update(Expenditure expenditure, UpdateExpenditureRequest request) {
+        var cmd = new ExpenditureUpdateCommand(
+                request.amount(),
+                request.spentAt(),
+                request.memo(),
+                request.categoryId(),
+                request.excludedFromTotal()
+        );
+
+        expenditure.update(cmd);
     }
 }

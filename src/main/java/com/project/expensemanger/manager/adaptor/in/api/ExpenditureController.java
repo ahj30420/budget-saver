@@ -3,15 +3,19 @@ package com.project.expensemanger.manager.adaptor.in.api;
 import com.project.expensemanger.core.common.annotation.CurrentUser;
 import com.project.expensemanger.core.common.util.UrlCreator;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
+import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureIdResponse;
 import com.project.expensemanger.manager.adaptor.in.api.mapper.ExpenditureMapper;
 import com.project.expensemanger.manager.adaptor.in.api.spec.ExpenditureControllerSpec;
 import com.project.expensemanger.manager.application.port.in.ExpenditureUseCase;
+import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +48,19 @@ public class ExpenditureController implements ExpenditureControllerSpec {
     ) {
         useCase.deleteExpenditure(userId, expenditureId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/api/expenditure/{expenditureId}")
+    public ResponseEntity<ExpenditureIdResponse> updateExpenditure(
+            @CurrentUser Long userId,
+            @PathVariable("expenditureId") Long expenditureId,
+            @Valid @RequestBody UpdateExpenditureRequest requestDto
+    ) {
+        Expenditure updateExpenditure = useCase.updateExpenditure(userId, expenditureId, requestDto);
+        URI location = UrlCreator.createUri(DEFUALT, expenditureId);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.LOCATION, location.toString())
+                .body(mapper.toIdDto(updateExpenditure.getId()));
     }
 
 }

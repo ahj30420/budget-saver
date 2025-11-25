@@ -46,4 +46,11 @@ public class ExpenditurePersistenceAdapter implements ExpenditurePort {
         return expenditureJpaRepository.findByIdAndIsDeletedFalse(expenditureId)
                 .orElseThrow(() -> new BaseException(ExpenditureErrorCode.EXPENDITURE_NOT_FOUND));
     }
+
+    @Override
+    public void update(Expenditure updateExpenditure) {
+        ExpenditureJpaEntity entity = findByIdAndIsDeletedFalse(updateExpenditure.getId());
+        CategoryJpaEntity category = categoryJpaRepository.getReferenceById(updateExpenditure.getCategoryId());
+        entity.updateFromDomain(updateExpenditure, category);
+    }
 }

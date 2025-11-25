@@ -8,4 +8,6 @@ public interface ExpenditurePort {
     Expenditure findById(Long expenditureId);
 
     void delete(Expenditure expenditure);
+
+    void update(Expenditure expenditure);
 }
