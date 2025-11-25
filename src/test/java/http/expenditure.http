@@ -26,3 +26,7 @@ Authorization: Bearer {{accessToken}}
   "memo" : "테스트 중",
   "excludedFromTotal": true
 }
+
+### 지출 상세 조회
+GET http://localhost:8080/api/expenditure/1
+Authorization: Bearer {{accessToken}}
