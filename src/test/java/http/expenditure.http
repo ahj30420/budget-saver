@@ -1,4 +1,4 @@
-### 카테고리 등록
+### 지출 등록
 POST http://localhost:8080/api/expenditure
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
@@ -10,6 +10,19 @@ Authorization: Bearer {{accessToken}}
   "memo" : "테스트"
 }
 
-### 예산 삭제
+### 지출 삭제
 DELETE http://localhost:8080/api/expenditure/1
 Authorization: Bearer {{accessToken}}
+
+### 지출 수정
+PATCH http://localhost:8080/api/expenditure/1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "categoryId" : 1,
+  "amount" : 2000,
+  "spentAt" : "2026-10-25 15:12:30",
+  "memo" : "테스트 중",
+  "excludedFromTotal": true
+}
