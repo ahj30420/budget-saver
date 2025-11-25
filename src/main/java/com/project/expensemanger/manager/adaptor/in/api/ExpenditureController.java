@@ -8,7 +8,7 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.response.Expenditure
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureIdResponse;
 import com.project.expensemanger.manager.adaptor.in.api.mapper.ExpenditureMapper;
 import com.project.expensemanger.manager.adaptor.in.api.spec.ExpenditureControllerSpec;
-import com.project.expensemanger.manager.application.model.ExpenditureDetailView;
+import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.application.port.in.ExpenditureUseCase;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import jakarta.validation.Valid;
@@ -73,7 +73,7 @@ public class ExpenditureController implements ExpenditureControllerSpec {
             @CurrentUser Long userId,
             @PathVariable("expenditureId") Long expenditureId
     ) {
-        ExpenditureDetailView expenditureDetails = useCase.getExpenditureDetails(userId, expenditureId);
+        ExpenditureDetailModel expenditureDetails = useCase.getExpenditureDetails(userId, expenditureId);
         return ResponseEntity.ok(mapper.toExpenditureDetailsDto(expenditureDetails));
     }
 }

@@ -5,11 +5,11 @@ import com.project.expensemanger.core.common.exception.errorcode.ExpenditureErro
 import com.project.expensemanger.manager.adaptor.out.jpa.category.CategoryJpaRepository;
 import com.project.expensemanger.manager.adaptor.out.jpa.category.entity.CategoryJpaEntity;
 import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.ExpenditureJpaRepository;
-import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.projection.ExpenditureDetailProjection;
 import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.entity.ExpenditureJpaEntity;
+import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.projection.ExpenditureDetailProjection;
 import com.project.expensemanger.manager.adaptor.out.jpa.user.UserJpaRepository;
 import com.project.expensemanger.manager.adaptor.out.jpa.user.entity.UserJpaEntity;
-import com.project.expensemanger.manager.application.model.ExpenditureDetailView;
+import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.application.port.out.ExpenditurePort;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import lombok.RequiredArgsConstructor;
@@ -57,11 +57,11 @@ public class ExpenditurePersistenceAdapter implements ExpenditurePort {
     }
 
     @Override
-    public ExpenditureDetailView getDetails(Long expenditureId) {
+    public ExpenditureDetailModel getDetails(Long expenditureId) {
         ExpenditureDetailProjection p = expenditureJpaRepository.findDetailById(expenditureId)
                 .orElseThrow(() -> new BaseException(ExpenditureErrorCode.EXPENDITURE_NOT_FOUND));
 
-        return new ExpenditureDetailView(
+        return new ExpenditureDetailModel(
                 p.getExpenditureId(),
                 p.getUserId(),
                 p.getSpendAt(),

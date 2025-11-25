@@ -1,6 +1,6 @@
 package com.project.expensemanger.manager.application.port.out;
 
-import com.project.expensemanger.manager.application.model.ExpenditureDetailView;
+import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 
 public interface ExpenditurePort {
@@ -12,5 +12,5 @@ public interface ExpenditurePort {
 
     void update(Expenditure expenditure);
 
-    ExpenditureDetailView getDetails(Long expenditureId);
+    ExpenditureDetailModel getDetails(Long expenditureId);
 }

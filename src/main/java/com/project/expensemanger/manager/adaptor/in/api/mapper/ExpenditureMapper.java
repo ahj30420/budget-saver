@@ -3,7 +3,7 @@ package com.project.expensemanger.manager.adaptor.in.api.mapper;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureDetailsResponse;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureIdResponse;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.GetCategoryResponse;
-import com.project.expensemanger.manager.application.model.ExpenditureDetailView;
+import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,7 +12,7 @@ public class ExpenditureMapper {
         return new ExpenditureIdResponse(expenditureId);
     }
 
-    public ExpenditureDetailsResponse toExpenditureDetailsDto(ExpenditureDetailView detailView) {
+    public ExpenditureDetailsResponse toExpenditureDetailsDto(ExpenditureDetailModel detailView) {
         return new ExpenditureDetailsResponse(
                 detailView.expenditureId(),
                 detailView.spentAt(),
