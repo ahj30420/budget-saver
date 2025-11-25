@@ -1,5 +1,7 @@
 package com.project.expensemanger.manager.application.service;
 
+import com.project.expensemanger.core.common.exception.BaseException;
+import com.project.expensemanger.core.common.exception.errorcode.ExpenditureErrorCode;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
 import com.project.expensemanger.manager.application.port.in.ExpenditureUseCase;
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
@@ -7,6 +9,7 @@ import com.project.expensemanger.manager.application.port.out.ExpenditurePort;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,5 +36,19 @@ public class ExpenditureService implements ExpenditureUseCase {
 
     private void validateCategory(Long categoryId) {
         categoryPort.findById(categoryId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteExpenditure(Long userId, Long expenditureId) {
+        Expenditure expenditure = expenditurePort.findById(expenditureId);
+        validateOwner(userId, expenditure);
+        expenditurePort.delete(expenditure);
+    }
+
+    private void validateOwner(Long userId, Expenditure expenditure) {
+        if (!expenditure.getUserId().equals(userId)) {
+            throw new BaseException(ExpenditureErrorCode.EXPENDITURE_FORBIDDEN);
+        }
     }
 }

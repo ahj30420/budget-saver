@@ -6,4 +6,6 @@ import jakarta.validation.Valid;
 
 public interface ExpenditureUseCase {
     Long registerExpenditure(Long userId, RegisterExpenditure requestDto);
+
+    void deleteExpenditure(Long userId, Long expenditureId);
 }

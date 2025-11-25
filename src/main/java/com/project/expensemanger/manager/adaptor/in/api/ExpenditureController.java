@@ -11,6 +11,8 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +34,16 @@ public class ExpenditureController implements ExpenditureControllerSpec {
         Long expenditureId = useCase.registerExpenditure(userId, requestDto);
         URI location = UrlCreator.createUri(DEFUALT, expenditureId);
         return ResponseEntity.created(location).body(mapper.toIdDto(expenditureId));
+    }
+
+    @Override
+    @DeleteMapping("/api/expenditure/{expenditureId}")
+    public ResponseEntity<Void> deleteExpenditure(
+            @CurrentUser Long userId,
+            @PathVariable("expenditureId") Long expenditureId
+    ) {
+        useCase.deleteExpenditure(userId, expenditureId);
+        return ResponseEntity.noContent().build();
     }
 
 }

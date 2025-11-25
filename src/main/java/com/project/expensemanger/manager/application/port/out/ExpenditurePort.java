@@ -4,4 +4,8 @@ import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 
 public interface ExpenditurePort {
     Expenditure save(Expenditure expenditure);
+
+    Expenditure findById(Long expenditureId);
+
+    void delete(Expenditure expenditure);
 }

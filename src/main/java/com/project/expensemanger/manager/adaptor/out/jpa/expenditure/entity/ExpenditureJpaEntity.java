@@ -77,4 +77,8 @@ public class ExpenditureJpaEntity extends BaseDateTime {
                 .excludedFromTotal(excludedFromTotal)
                 .build();
     }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
 }
