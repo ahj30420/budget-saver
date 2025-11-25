@@ -2,6 +2,7 @@ package com.project.expensemanger.manager.application.mock;
 
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
+import com.project.expensemanger.manager.domain.expenditure.ExpenditureUpdateCommand;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
@@ -9,14 +10,29 @@ import org.springframework.stereotype.Component;
 public class ExpenditureMock {
 
     private final Long id = 1L;
+
     private final LocalDateTime spentAt = LocalDateTime.of(2026, 11, 25, 12, 30, 10);
+    private final LocalDateTime changedSpendAt = LocalDateTime.of(2026, 10, 25, 12, 30, 10);
+
     private final Long amount = 1000L;
+    private final Long changedAmount = 2000L;
+    private final Long zeroAmount = 0L;
+    private final Long negativeAmount = -1L;
+
     private final String memo = "메모 테스트";
+    private final String changedMemo = "메모 수정";
+
     private final boolean excludedFromTotal = false;
+    private final boolean changedExcludedFromTotal = true;
+
     private final Long categoryId = 1L;
+    private final Long changedCategoryId = 2L;
+    private final Long zeroCategoryId = 0L;
+    private final Long negativeCategoryId = -1L;
+
     private final Long userId = 1L;
 
-    public Expenditure toDomain() {
+    public Expenditure domainMock() {
         return Expenditure.builder()
                 .id(id)
                 .spentAt(spentAt)
@@ -34,6 +50,86 @@ public class ExpenditureMock {
                 amount,
                 spentAt,
                 memo
+        );
+    }
+
+    public ExpenditureUpdateCommand UpdateRequestCommand() {
+        return new ExpenditureUpdateCommand(
+                changedAmount,
+                changedSpendAt,
+                changedMemo,
+                changedCategoryId,
+                changedExcludedFromTotal
+        );
+    }
+
+    public ExpenditureUpdateCommand zeroAmountCommand() {
+        return new ExpenditureUpdateCommand(
+                zeroAmount,
+                changedSpendAt,
+                changedMemo,
+                changedCategoryId,
+                changedExcludedFromTotal
+        );
+    }
+
+    public ExpenditureUpdateCommand negativeAmountCommand() {
+        return new ExpenditureUpdateCommand(
+                negativeAmount,
+                changedSpendAt,
+                changedMemo,
+                changedCategoryId,
+                changedExcludedFromTotal
+        );
+    }
+
+    public ExpenditureUpdateCommand nullAmountCommand() {
+        return new ExpenditureUpdateCommand(
+                null,
+                changedSpendAt,
+                changedMemo,
+                changedCategoryId,
+                changedExcludedFromTotal
+        );
+    }
+
+    public ExpenditureUpdateCommand zeroCategoryIdCommand() {
+        return new ExpenditureUpdateCommand(
+                changedAmount,
+                changedSpendAt,
+                changedMemo,
+                zeroCategoryId,
+                changedExcludedFromTotal
+        );
+    }
+
+    public ExpenditureUpdateCommand negativeCategoryIdCommand() {
+        return new ExpenditureUpdateCommand(
+                changedAmount,
+                changedSpendAt,
+                changedMemo,
+                negativeCategoryId,
+                changedExcludedFromTotal
+        );
+    }
+
+    public ExpenditureUpdateCommand nullCategoryIdCommand() {
+        return new ExpenditureUpdateCommand(
+                changedAmount,
+                changedSpendAt,
+                changedMemo,
+                null,
+                changedExcludedFromTotal
+        );
+    }
+
+    public ExpenditureUpdateCommand nullSpendAtCommand() {
+        return new ExpenditureUpdateCommand(
+                changedAmount,
+                null,
+                changedMemo,
+                changedCategoryId,
+                changedExcludedFromTotal
         );
     }
 
