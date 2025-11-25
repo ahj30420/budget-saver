@@ -3,6 +3,7 @@ package com.project.expensemanger.manager.adaptor.in.api;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.expensemanger.core.common.security.annotation.MockCustomUser;
@@ -94,6 +95,24 @@ class ExpenditureControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.body.expenditureId").value(expenditure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
+
+    @Test
+    @DisplayName("지출 삭제 테스트 : 성공")
+    @MockCustomUser
+    void expenditure_delete_success_test() throws Exception {
+        // given
+        willDoNothing().given(expenditureUseCase).deleteExpenditure(anyLong(), anyLong());
+
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/expenditure" + "/{expenditureId}", 1L));
+
+        // then
+        perform
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
     }
 }
