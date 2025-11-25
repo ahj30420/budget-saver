@@ -2,7 +2,6 @@ package com.project.expensemanger.manager.application.mock;
 
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class ExpenditureMock {
 
     private final Long id = 1L;
-    private final LocalDateTime spentAt = LocalDateTime.of(2025, 11, 25, 12, 30, 10);
+    private final LocalDateTime spentAt = LocalDateTime.of(2026, 11, 25, 12, 30, 10);
     private final Long amount = 1000L;
     private final String memo = "메모 테스트";
     private final boolean excludedFromTotal = false;
