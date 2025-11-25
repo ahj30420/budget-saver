@@ -85,9 +85,9 @@ public class BudgetPersistenceAdapter implements BudgetPort {
     public List<CategoryBudgetStat> findTotalBudgetByCategory() {
         return budgetJpaRepository.findTotalBudgetByCategory().stream()
                 .map(row -> new CategoryBudgetStat(
-                        row.categoryId(),
-                        row.categoryName(),
-                        row.totalBudgetAmount()
+                        row.getCategoryId(),
+                        row.getCategoryName(),
+                        row.getTotalBudgetAmount()
                 )).toList();
     }
 
@@ -95,9 +95,9 @@ public class BudgetPersistenceAdapter implements BudgetPort {
     public List<CategoryBudgetStat> findSummaryByCategory() {
         return categoryBudgetSummaryJpaRespository.findSummaryByCategory().stream()
                 .map(row -> new CategoryBudgetStat(
-                        row.categoryId(),
-                        row.categoryName(),
-                        row.totalBudgetAmount()
+                        row.getCategoryId(),
+                        row.getCategoryName(),
+                        row.getTotalBudgetAmount()
                 )).toList();
     }
 }

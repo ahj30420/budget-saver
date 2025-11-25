@@ -1,7 +1,7 @@
 package com.project.expensemanger.manager.adaptor.out.jpa.budget;
 
-import com.project.expensemanger.manager.adaptor.out.jpa.budget.projection.CategoryBudgetSummaryDto;
 import com.project.expensemanger.manager.adaptor.out.jpa.budget.entity.BudgetJpaEntity;
+import com.project.expensemanger.manager.adaptor.out.jpa.budget.projection.CategoryBudgetSummaryProjection;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -30,12 +30,13 @@ public interface BudgetJpaRepository extends JpaRepository<BudgetJpaEntity, Long
     List<BudgetJpaEntity> findByUserIdAndIsDeletedFalse(Long userId);
 
     @Query("""
-                    select new com.project.expensemanger.manager.adaptor.out.jpa.budget.projection.CategoryBudgetSummaryDto
-                    (b.category.id, b.category.name, sum(b.amount))
-                    from BudgetJpaEntity b
-                    where b.category.type = com.project.expensemanger.manager.adaptor.out.jpa.category.entity.CategoryKind.STANDARD
-                        and b.isDeleted = false
-                    group by b.category.id     
+                select b.category.id as categoryId,
+                       b.category.name as categoryName,
+                       sum(b.amount) as totalBudgetAmount
+                from BudgetJpaEntity b
+                where b.category.type = com.project.expensemanger.manager.adaptor.out.jpa.category.entity.CategoryKind.STANDARD
+                  and b.isDeleted = false
+                group by b.category.id
             """)
-    List<CategoryBudgetSummaryDto> findTotalBudgetByCategory();
+    List<CategoryBudgetSummaryProjection> findTotalBudgetByCategory();
 }
