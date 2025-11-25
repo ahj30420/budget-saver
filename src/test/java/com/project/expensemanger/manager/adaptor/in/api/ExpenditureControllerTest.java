@@ -9,6 +9,7 @@ import com.project.expensemanger.core.common.security.annotation.MockCustomUser;
 import com.project.expensemanger.core.common.security.config.AuthTestConfig;
 import com.project.expensemanger.core.config.SecurityConfig;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
+import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
 import com.project.expensemanger.manager.adaptor.in.api.mapper.ExpenditureMapper;
 import com.project.expensemanger.manager.application.mock.ExpenditureMock;
 import com.project.expensemanger.manager.application.port.in.ExpenditureUseCase;
@@ -49,7 +50,7 @@ class ExpenditureControllerTest {
     @MockCustomUser
     void expenditure_register_success_test() throws Exception {
         // given
-        Expenditure expenditure = expenditureMock.toDomain();
+        Expenditure expenditure = expenditureMock.domainMock();
         RegisterExpenditure registerExpenditure = expenditureMock.RegisterRequestDto();
         String content = objectMapper.writeValueAsString(registerExpenditure);
 
@@ -65,6 +66,32 @@ class ExpenditureControllerTest {
         // then
         perform
                 .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.expenditureId").value(expenditure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
+
+    @Test
+    @DisplayName("지출 수정 테스트 : 성공")
+    @MockCustomUser
+    void expenditure_update_success_test() throws Exception {
+        // given
+        Expenditure expenditure = expenditureMock.domainMock();
+        UpdateExpenditureRequest requestDto = expenditureMock.updateRequestDto();
+        String content = objectMapper.writeValueAsString(requestDto);
+
+        given(expenditureUseCase.updateExpenditure(anyLong(), anyLong(), any(UpdateExpenditureRequest.class)))
+                .willReturn(expenditure);
+
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.patch("/api/expenditure" + "/{expenditureId}", 1L)
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        perform
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.body.expenditureId").value(expenditure.getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
