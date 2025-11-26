@@ -1,8 +1,8 @@
 package com.project.expensemanger.manager.application.port.out;
 
 import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.dto.GetExpenditureListCondition;
-import com.project.expensemanger.manager.application.model.ExpenditureByCategoryModel;
-import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
+import com.project.expensemanger.manager.application.service.model.ExpenditureByCategoryModel;
+import com.project.expensemanger.manager.application.service.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import java.util.List;
 

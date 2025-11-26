@@ -1,4 +1,4 @@
-package com.project.expensemanger.manager.application.model;
+package com.project.expensemanger.manager.application.service.model;
 
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import java.util.List;

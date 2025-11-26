@@ -10,8 +10,8 @@ import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.entity.Expe
 import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.projection.ExpenditureDetailProjection;
 import com.project.expensemanger.manager.adaptor.out.jpa.user.UserJpaRepository;
 import com.project.expensemanger.manager.adaptor.out.jpa.user.entity.UserJpaEntity;
-import com.project.expensemanger.manager.application.model.ExpenditureByCategoryModel;
-import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
+import com.project.expensemanger.manager.application.service.model.ExpenditureByCategoryModel;
+import com.project.expensemanger.manager.application.service.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.application.port.out.ExpenditurePort;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import java.util.List;

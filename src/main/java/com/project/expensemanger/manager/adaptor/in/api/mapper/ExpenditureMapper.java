@@ -8,9 +8,9 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.response.Expenditure
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureListResponse.ExpenditureInfo;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.GetCategoryResponse;
 import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.dto.GetExpenditureListCondition;
-import com.project.expensemanger.manager.application.model.ExpenditureByCategoryModel;
-import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
-import com.project.expensemanger.manager.application.model.ExpenditureListModel;
+import com.project.expensemanger.manager.application.service.model.ExpenditureByCategoryModel;
+import com.project.expensemanger.manager.application.service.model.ExpenditureDetailModel;
+import com.project.expensemanger.manager.application.service.model.ExpenditureListModel;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import java.util.ArrayList;
 import java.util.List;

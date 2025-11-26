@@ -13,7 +13,7 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpe
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
 import com.project.expensemanger.manager.adaptor.in.api.mapper.ExpenditureMapper;
 import com.project.expensemanger.manager.application.mock.ExpenditureMock;
-import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
+import com.project.expensemanger.manager.application.service.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.application.port.in.ExpenditureUseCase;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import org.junit.jupiter.api.DisplayName;

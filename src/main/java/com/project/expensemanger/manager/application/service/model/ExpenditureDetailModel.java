@@ -1,4 +1,4 @@
-package com.project.expensemanger.manager.application.model;
+package com.project.expensemanger.manager.application.service.model;
 
 import java.time.LocalDateTime;
 

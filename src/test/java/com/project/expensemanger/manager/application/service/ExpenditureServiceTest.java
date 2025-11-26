@@ -18,7 +18,7 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpe
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
 import com.project.expensemanger.manager.application.mock.CategoryMock;
 import com.project.expensemanger.manager.application.mock.ExpenditureMock;
-import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
+import com.project.expensemanger.manager.application.service.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
 import com.project.expensemanger.manager.application.port.out.ExpenditurePort;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
@@ -230,5 +230,15 @@ class ExpenditureServiceTest {
         assertThatThrownBy(() -> sut.getExpenditureDetails(otherUserId, expenditureId))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(ExpenditureErrorCode.EXPENDITURE_FORBIDDEN.getMessage());
+    }
+
+    @Test
+    @DisplayName("지출 목록 조회 테스트 : 성공")
+    void expenditure_list_success_test() throws Exception {
+        // given
+
+        // when
+
+        // then
     }
 }
