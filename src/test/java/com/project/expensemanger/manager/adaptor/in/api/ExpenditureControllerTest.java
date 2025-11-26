@@ -15,6 +15,7 @@ import com.project.expensemanger.manager.adaptor.in.api.mapper.ExpenditureMapper
 import com.project.expensemanger.manager.application.mock.ExpenditureMock;
 import com.project.expensemanger.manager.application.service.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.application.port.in.ExpenditureUseCase;
+import com.project.expensemanger.manager.application.service.model.ExpenditureListModel;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -134,6 +135,36 @@ class ExpenditureControllerTest {
         perform
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
+    }
+
+    @Test
+    @DisplayName("지출 목록 조회 테스트 : 성공")
+    @MockCustomUser
+    void expenditure_list_success_test() throws Exception {
+        // given
+        ExpenditureListModel model = expenditureMock.expenditureListModel();
+
+        given(expenditureUseCase.getExpenditureListByCondition(any()))
+                .willReturn(model);
+
+        // when
+        ResultActions perform = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/expenditure/list")
+                        .param("categoryId", "1")
+                        .param("startDate", "2025-11-25T00:00:00")
+                        .param("endDate", "2025-11-26T00:00:00")
+                        .param("minAmount", "1000")
+                        .param("maxAmount", "5000")
+        );
+
+        // then
+        perform
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.expenditures").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.totalAmount").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.categoryAmounts").isArray())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isString());
     }
 }

@@ -6,6 +6,7 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpend
 import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.dto.GetExpenditureListCondition;
 import com.project.expensemanger.manager.application.service.model.ExpenditureByCategoryModel;
 import com.project.expensemanger.manager.application.service.model.ExpenditureDetailModel;
+import com.project.expensemanger.manager.application.service.model.ExpenditureListModel;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import com.project.expensemanger.manager.domain.expenditure.ExpenditureUpdateCommand;
 import java.time.LocalDateTime;
@@ -179,6 +180,14 @@ public class ExpenditureMock {
 
     public List<ExpenditureByCategoryModel> expenditureByCategoryModel() {
         return List.of(new ExpenditureByCategoryModel(1L, "카테고리 이름1", 1000L));
+    }
+
+    public ExpenditureListModel expenditureListModel() {
+        return new ExpenditureListModel(
+                domainMockList(),
+                1000L,
+                expenditureByCategoryModel()
+        );
     }
 
     public Long getId() {

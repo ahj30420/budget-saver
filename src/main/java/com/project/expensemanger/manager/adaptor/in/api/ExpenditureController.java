@@ -81,10 +81,11 @@ public class ExpenditureController implements ExpenditureControllerSpec {
         return ResponseEntity.ok(mapper.toExpenditureDetailsDto(expenditureDetails));
     }
 
+    @Override
     @GetMapping("/api/expenditure/list")
     public ResponseEntity<ExpenditureListResponse> getExpenditureList(
             @CurrentUser Long userId,
-            @ModelAttribute GetExpenditureListRequest requestDto
+            @Valid @ModelAttribute GetExpenditureListRequest requestDto
     ) {
         ExpenditureListModel expenditureListByCondition = useCase.getExpenditureListByCondition(
                 mapper.toConditionDto(userId, requestDto));

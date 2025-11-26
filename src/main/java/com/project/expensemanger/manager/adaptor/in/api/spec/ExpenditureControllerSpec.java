@@ -1,13 +1,17 @@
 package com.project.expensemanger.manager.adaptor.in.api.spec;
 
+import com.project.expensemanger.core.common.annotation.CurrentUser;
+import com.project.expensemanger.manager.adaptor.in.api.dto.request.GetExpenditureListRequest;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureDetailsResponse;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureIdResponse;
+import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureListResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Tag(name = "지출 API", description = "지출 관련 API 명세")
 public interface ExpenditureControllerSpec {
@@ -73,5 +77,18 @@ public interface ExpenditureControllerSpec {
                     example = "1"
             )
             Long expenditureId
+    );
+
+
+    @Operation(
+            summary = "지출 목록 조회",
+            description = "지출 목록 정보를 조회합니다."
+    )
+    ResponseEntity<ExpenditureListResponse> getExpenditureList(
+            @Parameter(hidden = true)
+            Long userId,
+
+            @Parameter(description = "지출 목록 조회 조건 DTO", required = true)
+            GetExpenditureListRequest requestDto
     );
 }
