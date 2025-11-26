@@ -13,8 +13,6 @@ import com.project.expensemanger.core.common.security.jwt.JwtProvider;
 import com.project.expensemanger.core.common.util.CookieUtils;
 import com.project.expensemanger.core.common.util.ResponseUtil;
 import com.project.expensemanger.manager.adaptor.in.api.mapper.UserMapper;
-import com.project.expensemanger.manager.adaptor.out.AuthPersistenceAdapter;
-import com.project.expensemanger.manager.adaptor.out.redis.RedisRepository;
 import com.project.expensemanger.manager.application.mock.UserMock;
 import com.project.expensemanger.manager.application.port.in.AuthUseCase;
 import com.project.expensemanger.manager.application.port.in.UserUseCase;
@@ -23,13 +21,13 @@ import com.project.expensemanger.manager.application.port.out.UserPort;
 import com.project.expensemanger.manager.application.service.AuthService;
 import com.project.expensemanger.manager.application.service.UserService;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Configuration
+@TestConfiguration
 public class AuthTestConfig {
 
     @Bean
