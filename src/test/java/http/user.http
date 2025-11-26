@@ -13,7 +13,7 @@ POST http://localhost:8080/api/login
 Content-Type: application/json
 
 {
-  "email": "ahj30420@naver.com",
+  "email": "test1@naver.com",
   "password": "testpw1234"
 }
 
