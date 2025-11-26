@@ -14,13 +14,16 @@ import static org.mockito.Mockito.verify;
 import com.project.expensemanger.core.common.exception.BaseException;
 import com.project.expensemanger.core.common.exception.errorcode.CategoryErrorCode;
 import com.project.expensemanger.core.common.exception.errorcode.ExpenditureErrorCode;
+import com.project.expensemanger.manager.adaptor.in.api.dto.request.GetExpenditureListRequest;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
+import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.dto.GetExpenditureListCondition;
 import com.project.expensemanger.manager.application.mock.CategoryMock;
 import com.project.expensemanger.manager.application.mock.ExpenditureMock;
 import com.project.expensemanger.manager.application.service.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.application.port.out.CategoryPort;
 import com.project.expensemanger.manager.application.port.out.ExpenditurePort;
+import com.project.expensemanger.manager.application.service.model.ExpenditureListModel;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -236,9 +239,20 @@ class ExpenditureServiceTest {
     @DisplayName("지출 목록 조회 테스트 : 성공")
     void expenditure_list_success_test() throws Exception {
         // given
+        Long userId = expenditureMock.getUserId();
+        GetExpenditureListCondition condition = expenditureMock.getExpenditureListCondition();
+
+        given(expenditurePort.findAllExpenditureByCondition(condition))
+                .willReturn(expenditureMock.domainMockList());
+        given(expenditurePort.findTotalExpenditureByCategory(condition))
+                .willReturn(expenditureMock.expenditureByCategoryModel());
 
         // when
+        ExpenditureListModel result = sut.getExpenditureListByCondition(condition);
 
         // then
+        assertThat(result.expenditures()).isNotEmpty();
+        assertThat(result.expenditures().get(0).getId()).isEqualTo(1L);
+        assertThat(result.categoryAmounts()).isNotEmpty();
     }
 }

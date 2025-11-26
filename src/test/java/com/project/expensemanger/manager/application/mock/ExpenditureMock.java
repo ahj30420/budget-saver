@@ -1,11 +1,15 @@
 package com.project.expensemanger.manager.application.mock;
 
+import com.project.expensemanger.manager.adaptor.in.api.dto.request.GetExpenditureListRequest;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
+import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.dto.GetExpenditureListCondition;
+import com.project.expensemanger.manager.application.service.model.ExpenditureByCategoryModel;
 import com.project.expensemanger.manager.application.service.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import com.project.expensemanger.manager.domain.expenditure.ExpenditureUpdateCommand;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -156,6 +160,25 @@ public class ExpenditureMock {
                 categoryId,
                 "카테고리 이름"
         );
+    }
+
+    public GetExpenditureListCondition getExpenditureListCondition() {
+        return new GetExpenditureListCondition(
+                1L,
+                1L,
+                LocalDateTime.of(2025, 11, 26, 12, 30, 0),
+                LocalDateTime.of(2025, 11, 27, 12, 30, 0),
+                1000L,
+                3000L
+        );
+    }
+
+    public List<Expenditure> domainMockList() {
+        return List.of(domainMock());
+    }
+
+    public List<ExpenditureByCategoryModel> expenditureByCategoryModel() {
+        return List.of(new ExpenditureByCategoryModel(1L, "카테고리 이름1", 1000L));
     }
 
     public Long getId() {
