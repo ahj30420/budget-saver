@@ -27,7 +27,6 @@ import org.testcontainers.utility.DockerImageName;
 @DataRedisTest(excludeAutoConfiguration = {
     org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration.class
 })
-@AutoConfigureTestDatabase(replace = Replace.NONE)
 @Import({RedisRepository.class, ObjectMapper.class})
 class RedisRepositoryTest {
 

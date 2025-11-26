@@ -1,14 +1,12 @@
 package com.project.expensemanger.manager.adaptor.in.api;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-
-import static org.mockito.ArgumentMatchers.any;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.expensemanger.core.common.security.annotation.MockCustomUser;
 import com.project.expensemanger.core.common.security.config.AuthTestConfig;
-import com.project.expensemanger.core.config.JacksonConfig;
 import com.project.expensemanger.core.config.SecurityConfig;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterBudgetList;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateBudgetRequest;
@@ -31,7 +29,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(BudgetController.class)
-@Import({SecurityConfig.class, AuthTestConfig.class, BudgetUseCase.class, BudgetMapper.class, BudgetMock.class})
+@Import({SecurityConfig.class, AuthTestConfig.class, BudgetMapper.class, BudgetMock.class})
 @AutoConfigureMockMvc
 class BudgetControllerTest {
 

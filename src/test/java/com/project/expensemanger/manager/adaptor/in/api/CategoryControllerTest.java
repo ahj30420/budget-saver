@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(CategoryController.class)
-@Import({SecurityConfig.class, AuthTestConfig.class, CategoryUseCase.class, CategoryMock.class, CategoryMapper.class})
+@Import({SecurityConfig.class, AuthTestConfig.class, CategoryMock.class, CategoryMapper.class})
 @AutoConfigureMockMvc
 class CategoryControllerTest {
 

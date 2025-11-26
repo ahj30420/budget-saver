@@ -52,9 +52,7 @@ public class BudgetPersistenceAdapter implements BudgetPort {
 
     @Override
     public Budget findByIdAndUserId(Long budgetId, Long userId) {
-        return budgetJpaRepository.findByIdAndUserIdAndIsDeletedFalse(budgetId, userId)
-                .map(BudgetJpaEntity::toDmain)
-                .orElseThrow(() -> new BaseException(BudgetErrorCode.BUDGET_NOT_FOUND));
+        return findByIdAndUserIdAndIsDeletedFalse(budgetId, userId).toDmain();
     }
 
     @Override
@@ -87,9 +85,9 @@ public class BudgetPersistenceAdapter implements BudgetPort {
     public List<CategoryBudgetStat> findTotalBudgetByCategory() {
         return budgetJpaRepository.findTotalBudgetByCategory().stream()
                 .map(row -> new CategoryBudgetStat(
-                        row.categoryId(),
-                        row.categoryName(),
-                        row.totalBudgetAmount()
+                        row.getCategoryId(),
+                        row.getCategoryName(),
+                        row.getTotalBudgetAmount()
                 )).toList();
     }
 
@@ -97,9 +95,9 @@ public class BudgetPersistenceAdapter implements BudgetPort {
     public List<CategoryBudgetStat> findSummaryByCategory() {
         return categoryBudgetSummaryJpaRespository.findSummaryByCategory().stream()
                 .map(row -> new CategoryBudgetStat(
-                        row.categoryId(),
-                        row.categoryName(),
-                        row.totalBudgetAmount()
+                        row.getCategoryId(),
+                        row.getCategoryName(),
+                        row.getTotalBudgetAmount()
                 )).toList();
     }
 }

@@ -5,9 +5,6 @@ import com.project.expensemanger.manager.adaptor.in.api.dto.response.CategoryIdR
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.GetCategoryResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
