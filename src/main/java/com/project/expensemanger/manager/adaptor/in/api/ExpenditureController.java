@@ -2,13 +2,16 @@ package com.project.expensemanger.manager.adaptor.in.api;
 
 import com.project.expensemanger.core.common.annotation.CurrentUser;
 import com.project.expensemanger.core.common.util.UrlCreator;
+import com.project.expensemanger.manager.adaptor.in.api.dto.request.GetExpenditureListRequest;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.RegisterExpenditure;
 import com.project.expensemanger.manager.adaptor.in.api.dto.request.UpdateExpenditureRequest;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureDetailsResponse;
 import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureIdResponse;
+import com.project.expensemanger.manager.adaptor.in.api.dto.response.ExpenditureListResponse;
 import com.project.expensemanger.manager.adaptor.in.api.mapper.ExpenditureMapper;
 import com.project.expensemanger.manager.adaptor.in.api.spec.ExpenditureControllerSpec;
 import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
+import com.project.expensemanger.manager.application.model.ExpenditureListModel;
 import com.project.expensemanger.manager.application.port.in.ExpenditureUseCase;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
 import jakarta.validation.Valid;
@@ -18,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,5 +79,15 @@ public class ExpenditureController implements ExpenditureControllerSpec {
     ) {
         ExpenditureDetailModel expenditureDetails = useCase.getExpenditureDetails(userId, expenditureId);
         return ResponseEntity.ok(mapper.toExpenditureDetailsDto(expenditureDetails));
+    }
+
+    @GetMapping("/api/expenditure/list")
+    public ResponseEntity<ExpenditureListResponse> getExpenditureList(
+            @CurrentUser Long userId,
+            @ModelAttribute GetExpenditureListRequest requestDto
+    ) {
+        ExpenditureListModel expenditureListByCondition = useCase.getExpenditureListByCondition(
+                mapper.toConditionDto(userId, requestDto));
+        return ResponseEntity.ok(mapper.toExpenditureListResponse(expenditureListByCondition));
     }
 }

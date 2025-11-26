@@ -1,12 +1,13 @@
 package com.project.expensemanger.manager.adaptor.out.jpa.expenditure;
 
-import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.projection.ExpenditureDetailProjection;
 import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.entity.ExpenditureJpaEntity;
+import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.projection.ExpenditureDetailProjection;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface ExpenditureJpaRepository extends JpaRepository<ExpenditureJpaEntity, Long> {
+public interface ExpenditureJpaRepository extends JpaRepository<ExpenditureJpaEntity, Long>, ExpenditureCustomRepository{
+
     Optional<ExpenditureJpaEntity> findByIdAndIsDeletedFalse(Long expenditureId);
 
     @Query("""

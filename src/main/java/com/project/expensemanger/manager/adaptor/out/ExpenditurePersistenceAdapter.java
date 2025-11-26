@@ -5,13 +5,17 @@ import com.project.expensemanger.core.common.exception.errorcode.ExpenditureErro
 import com.project.expensemanger.manager.adaptor.out.jpa.category.CategoryJpaRepository;
 import com.project.expensemanger.manager.adaptor.out.jpa.category.entity.CategoryJpaEntity;
 import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.ExpenditureJpaRepository;
+import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.dto.GetExpenditureListCondition;
 import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.entity.ExpenditureJpaEntity;
 import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.projection.ExpenditureDetailProjection;
 import com.project.expensemanger.manager.adaptor.out.jpa.user.UserJpaRepository;
 import com.project.expensemanger.manager.adaptor.out.jpa.user.entity.UserJpaEntity;
+import com.project.expensemanger.manager.application.model.ExpenditureByCategoryModel;
 import com.project.expensemanger.manager.application.model.ExpenditureDetailModel;
 import com.project.expensemanger.manager.application.port.out.ExpenditurePort;
 import com.project.expensemanger.manager.domain.expenditure.Expenditure;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -70,5 +74,25 @@ public class ExpenditurePersistenceAdapter implements ExpenditurePort {
                 p.getCategoryId(),
                 p.getCategoryName()
         );
+    }
+
+    @Override
+    public List<Expenditure> findAllExpenditureByCondition(GetExpenditureListCondition conditionDto) {
+        return expenditureJpaRepository.findAllExpenditureByCondition(conditionDto)
+                .stream()
+                .map(ExpenditureJpaEntity::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ExpenditureByCategoryModel> findTotalExpenditureByCategory(GetExpenditureListCondition conditionDto) {
+        return expenditureJpaRepository.findTotalExpenditureByCategory(conditionDto)
+                .stream()
+                .map(entity -> {
+                    return new ExpenditureByCategoryModel(
+                            entity.categoryId(),
+                            entity.categoryName(),
+                            entity.totalAmount());
+                }).collect(Collectors.toList());
     }
 }
