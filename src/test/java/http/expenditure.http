@@ -33,5 +33,5 @@ Authorization: Bearer {{accessToken}}
 
 
 ### 지출 목록 조회
-GET http://localhost:8080/api/expenditure/list?categoryId=1&startDate=2024-11-26T00:00:00&endDate=2025-12-30T00:00:00&minAmount=1000&maxAmount=10000
+GET http://localhost:8080/api/expenditure/list?categoryId=1&startDate=2024-11-26T00:00:00&endDate=2025-11-25T00:00:00&minAmount=1000&maxAmount=10000
 Authorization: Bearer {{accessToken}}

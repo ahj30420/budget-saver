@@ -53,6 +53,7 @@ public class ExpenditureCustomRepositoryImpl implements ExpenditureCustomReposit
                         spendAtRange(conditionDto.startDate(), conditionDto.endDate()),
                         amountRange(conditionDto.minAmount(), conditionDto.maxAmount())
                 )
+                .groupBy(expenditureJpaEntity.category.id)
                 .fetch();
     }
 
