@@ -1,0 +1,6 @@
+services:
+  redis:
+    image: redis
+    container_name: expenseManager-redis
+    ports:
+      - "6379:6379"

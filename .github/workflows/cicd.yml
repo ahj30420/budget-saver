@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: docker image build
+        run: docker build -t ahj30420/budget-saver:latest .
+
+
+      - name: docker hub login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: docker image push
+        run: docker push ahj30420/budget-saver:latest
+
+
+      - name: SSH Deploy
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: root
+          password: ${{ secrets.EC2_PASSWORD }}
+          script: |
+            cd ~/budget-saver/docker
+            # GitHub Secrets를 환경 변수로 export
+            export MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
+            export MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
+            export MYSQL_USER=${{ secrets.MYSQL_USER }}
+            export MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+            export JWT_SECRET=${{ secrets.JWT_SECRET }}
+            
+            ./deploy.sh first

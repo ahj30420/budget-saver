@@ -1,0 +1,63 @@
+### 예산 등록
+POST http://localhost:8080/api/budget/list
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "budgets": [
+    {
+      "budgetDate": "2025-09-10",
+      "amount": 5000,
+      "categoryId": 3
+    },
+    {
+      "budgetDate": "2025-09-10",
+      "amount": 3000,
+      "categoryId": 4
+    },
+    {
+      "budgetDate": "2025-09-10",
+      "amount": 1000,
+      "categoryId": 5
+    },
+    {
+      "budgetDate": "2025-09-10",
+      "amount": 2000,
+      "categoryId": 6
+    }
+  ]
+}
+
+
+### 예산 단건 조회
+GET http://localhost:8080/api/budget/6
+Authorization: Bearer {{accessToken}}
+
+### 사용자 예산 조회
+GET http://localhost:8080/api/budget/list
+Authorization: Bearer {{accessToken}}
+
+
+### 예산 수정
+PATCH http://localhost:8080/api/budget/5
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "amount": 1000,
+  "categoryId": 5
+}
+
+
+### 예산 삭제
+DELETE http://localhost:8080/api/budget/8
+Authorization: Bearer {{accessToken}}
+
+
+### 예산 추천
+GET http://localhost:8080/api/budget/recommendation?amount=1000000
+Authorization: Bearer {{accessToken}}
+
+### 예산 추천 v2
+GET http://localhost:8080/api/budget/recommendation/v2?amount=1000000
+Authorization: Bearer {{accessToken}}
