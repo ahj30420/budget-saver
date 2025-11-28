@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COMPOSE_FILE=docker/docker-compose.prod.yml
+COMPOSE_FILE=./docker-compose.prod.yml
 
 if [ "$1" == "first" ]; then
     echo ">>> 첫 배포: 모든 서비스 띄우기"
