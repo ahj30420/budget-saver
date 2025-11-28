@@ -33,7 +33,7 @@ jobs:
           username: root
           password: ${{ secrets.EC2_PASSWORD }}
           script: |
-            cd ~/budget-saver/docker
+            cd ~/budget-saver
             # GitHub Secrets를 환경 변수로 export
             export MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
             export MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
