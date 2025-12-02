@@ -1,4 +1,4 @@
-package com.project.expensemanger.manager.domain.recommendation;
+package com.project.expensemanger.manager.domain.consulting;
 
 import lombok.Getter;
 

@@ -1,6 +1,6 @@
 package com.project.expensemanger.manager.application.mock;
 
-import com.project.expensemanger.manager.domain.recommendation.BudgetConsumption;
+import com.project.expensemanger.manager.domain.consulting.BudgetConsumption;
 import org.springframework.stereotype.Component;
 
 @Component

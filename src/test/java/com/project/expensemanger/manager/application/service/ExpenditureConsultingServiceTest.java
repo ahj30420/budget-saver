@@ -11,7 +11,7 @@ import com.project.expensemanger.manager.application.port.out.BudgetPort;
 import com.project.expensemanger.manager.application.port.out.ConsultingPort;
 import com.project.expensemanger.manager.application.service.model.CategoryRecommendtaionModel;
 import com.project.expensemanger.manager.application.service.model.TodayBudgetRecommendationModel;
-import com.project.expensemanger.manager.domain.recommendation.CategoryBudgetUsage;
+import com.project.expensemanger.manager.domain.consulting.CategoryBudgetUsage;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

@@ -2,7 +2,7 @@ package com.project.expensemanger.manager.adaptor.out;
 
 import com.project.expensemanger.manager.adaptor.out.jpa.budget.BudgetJpaRepository;
 import com.project.expensemanger.manager.application.port.out.ConsultingPort;
-import com.project.expensemanger.manager.domain.recommendation.CategoryBudgetUsage;
+import com.project.expensemanger.manager.domain.consulting.CategoryBudgetUsage;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
