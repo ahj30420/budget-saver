@@ -2,6 +2,7 @@ package com.project.expensemanger.manager.application.service;
 
 import com.project.expensemanger.manager.application.port.out.BudgetPort;
 import com.project.expensemanger.manager.application.port.out.ConsultingPort;
+import com.project.expensemanger.manager.application.service.dto.GetBudgetUsageCondition;
 import com.project.expensemanger.manager.application.service.model.CategoryRecommendtaionModel;
 import com.project.expensemanger.manager.application.service.model.TodayBudgetRecommendationModel;
 import com.project.expensemanger.manager.domain.budget.Budget;
@@ -38,8 +39,13 @@ public class ExpenditureConsultingService {
             return emptyRecommendation();
         }
 
-        List<CategoryBudgetUsage> categoryBudgetUsageList = consultingPort.getCategoryBudgetUsage(startDate, endDate,
-                userId);
+        GetBudgetUsageCondition condition = GetBudgetUsageCondition.builder()
+                .startDate(startDate)
+                .endDate(endDate)
+                .userId(userId)
+                .build();
+
+        List<CategoryBudgetUsage> categoryBudgetUsageList = consultingPort.getCategoryBudgetUsage(condition);
 
         long remainingDays = ChronoUnit.DAYS.between(now, endDate) + 1;
 
@@ -58,7 +64,8 @@ public class ExpenditureConsultingService {
         long elapsedDays = ChronoUnit.DAYS.between(startDate, now) + 1;
         long totalDays = ChronoUnit.DAYS.between(startDate, endDate) + 1;
 
-        BudgetConsumption consumption = new BudgetConsumption(totalBudgetAmount, totalExpenditureAmount, elapsedDays, totalDays);
+        BudgetConsumption consumption = new BudgetConsumption(totalBudgetAmount, totalExpenditureAmount, elapsedDays,
+                totalDays);
 
         long todayTotalPossible = categoryRecommendations.stream()
                 .mapToLong(CategoryRecommendtaionModel::getRecommendedAmount)

@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface BudgetJpaRepository extends JpaRepository<BudgetJpaEntity, Long> {
+public interface BudgetJpaRepository extends JpaRepository<BudgetJpaEntity, Long>, BudgetCustomRepository {
 
     @Query("""
                 select b from BudgetJpaEntity b
@@ -43,28 +43,4 @@ public interface BudgetJpaRepository extends JpaRepository<BudgetJpaEntity, Long
 
     Optional<BudgetJpaEntity> findTopByUserIdAndIsDeletedFalseOrderByDateDesc(Long userId);
 
-
-    @Query("""
-                select 
-                     c.id as categoryId,
-                     c.name as categoryName,
-                     COALESCE(sum(e.amount), 0) as expenditureAmount,
-                     b.amount as budgetAmount
-                from BudgetJpaEntity b
-                join b.category c
-                left join ExpenditureJpaEntity e 
-                    on c.id = e.category.id
-                    and e.spendAt between :startDate and :endDate
-                    and e.user.id = :userId
-                    and e.isDeleted = false
-                where 
-                    b.user.id = :userId
-                    and b.date between :startDate and :endDate
-                    and b.isDeleted = false
-                group by c.id, c.name, b.amount
-            """)
-    List<CategoryBudgetUsageProjection> findTotalExpenditureByCategoryAndDateAndId(
-            @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate,
-            @Param("userId") Long userId);
 }

@@ -9,10 +9,10 @@ import com.project.expensemanger.manager.application.mock.BudgetMock;
 import com.project.expensemanger.manager.application.mock.CategoryBudgetUsageMock;
 import com.project.expensemanger.manager.application.port.out.BudgetPort;
 import com.project.expensemanger.manager.application.port.out.ConsultingPort;
+import com.project.expensemanger.manager.application.service.dto.GetBudgetUsageCondition;
 import com.project.expensemanger.manager.application.service.model.CategoryRecommendtaionModel;
 import com.project.expensemanger.manager.application.service.model.TodayBudgetRecommendationModel;
 import com.project.expensemanger.manager.domain.consulting.CategoryBudgetUsage;
-import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ class ExpenditureConsultingServiceTest {
         List<CategoryBudgetUsage> categoryUsageList = List.of(categoryBudgetUsageMock.domainMock());
 
         given(budgetPort.findLastestBudget(anyLong())).willReturn(budgetMock.domainMock());
-        given(consultingPort.getCategoryBudgetUsage(any(LocalDate.class), any(LocalDate.class), anyLong()))
+        given(consultingPort.getCategoryBudgetUsage(any(GetBudgetUsageCondition.class)))
                 .willReturn(categoryUsageList);
 
         // when
