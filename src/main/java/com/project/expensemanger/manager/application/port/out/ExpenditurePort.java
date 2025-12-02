@@ -20,4 +20,6 @@ public interface ExpenditurePort {
     List<Expenditure> findAllExpenditureByCondition(GetExpenditureListCondition conditionDto);
 
     List<ExpenditureByCategoryModel> findTotalExpenditureByCategory(GetExpenditureListCondition conditionDto);
+
+    List<Expenditure> findTodayExpenditure(Long userId);
 }
