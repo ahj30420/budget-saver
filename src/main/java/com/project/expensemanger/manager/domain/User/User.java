@@ -10,13 +10,15 @@ public class User {
     private String password;
     private String name;
     private UserRole role;
+    private boolean notificationSubscribed;
 
     @Builder
-    public User(Long id, String email, String password, String name, UserRole role) {
+    public User(Long id, String email, String password, String name, UserRole role, boolean notificationSubscribed) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.role = role;
+        this.notificationSubscribed = notificationSubscribed;
     }
 }

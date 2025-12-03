@@ -19,6 +19,7 @@ CREATE TABLE user (
     password VARCHAR(255) NOT NULL,
     name VARCHAR(255),
     role ENUM('ADMIN','USER') NOT NULL,
+    notification_subscribed BOOLEAN DEFAULT FALSE,
     is_deleted BOOLEAN DEFAULT FALSE,
     created_at DATETIME(6) NOT NULL,
     updated_at DATETIME(6),
@@ -81,13 +82,13 @@ CREATE TABLE expenditure (
 -- =========================================
 
 -- USER
-INSERT INTO user (email, password, name, role, is_deleted, created_at, updated_at)
+INSERT INTO user (email, password, name, role, notification_subscribed ,is_deleted, created_at, updated_at)
 VALUES
-    ('user01@example.com', '{noop}password001!@#', '사용자01', 'USER', FALSE, NOW(), NOW()),
-    ('user02@example.com', '{noop}password001!@#', '사용자02', 'USER', FALSE, NOW(), NOW()),
-    ('user03@example.com', '{noop}password001!@#', '사용자03', 'USER', FALSE, NOW(), NOW()),
-    ('user04@example.com', '{noop}password001!@#', '사용자04', 'USER', FALSE, NOW(), NOW()),
-    ('user05@example.com', '{noop}password001!@#', '사용자05', 'USER', FALSE, NOW(), NOW());
+    ('user01@example.com', '{noop}password001!@#', '사용자01', 'USER', FALSE, FALSE, NOW(), NOW()),
+    ('user03@example.com', '{noop}password001!@#', '사용자03', 'USER', FALSE, FALSE, NOW(), NOW()),
+    ('user04@example.com', '{noop}password001!@#', '사용자04', 'USER', FALSE, FALSE, NOW(), NOW()),
+    ('user02@example.com', '{noop}password001!@#', '사용자02', 'USER', FALSE, FALSE, NOW(), NOW()),
+    ('user05@example.com', '{noop}password001!@#', '사용자05', 'USER', FALSE, FALSE, NOW(), NOW());
 
 -- CATEGORY
 INSERT INTO category (name, type, is_deleted, created_at, updated_at)
