@@ -6,6 +6,8 @@ import com.project.expensemanger.manager.adaptor.out.jpa.user.UserJpaRepository;
 import com.project.expensemanger.manager.adaptor.out.jpa.user.entity.UserJpaEntity;
 import com.project.expensemanger.manager.application.port.out.UserPort;
 import com.project.expensemanger.manager.domain.User.User;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -34,5 +36,13 @@ public class UserPersistenceAdapter implements UserPort {
     public User save(User user) {
         UserJpaEntity saved = userJpaRepository.save(UserJpaEntity.from(user));
         return saved.toDomain();
+    }
+
+    @Override
+    public List<User> findSubscribedUser() {
+        return userJpaRepository.findByNotificationSubscribedTrueAndIsDeletedFalse()
+                .stream()
+                .map(UserJpaEntity::toDomain)
+                .collect(Collectors.toList());
     }
 }

@@ -14,6 +14,7 @@ import com.project.expensemanger.manager.domain.budget.Budget;
 import com.project.expensemanger.manager.domain.budget.recommendation.vo.CategoryBudgetStat;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -99,5 +100,12 @@ public class BudgetPersistenceAdapter implements BudgetPort {
                         row.getCategoryName(),
                         row.getTotalBudgetAmount()
                 )).toList();
+    }
+
+    @Override
+    public Budget findLastestBudget(Long userId) {
+        return budgetJpaRepository.findTopByUserIdAndIsDeletedFalseOrderByDateDesc(userId)
+                .map(BudgetJpaEntity::toDmain)
+                .orElse(null);
     }
 }

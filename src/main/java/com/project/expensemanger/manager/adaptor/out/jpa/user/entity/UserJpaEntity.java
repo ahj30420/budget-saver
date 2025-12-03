@@ -34,6 +34,8 @@ public class UserJpaEntity extends BaseDateTime {
     @Enumerated(EnumType.STRING)
     private UserRoleType role;
 
+    private boolean notificationSubscribed = false;
+
     private boolean isDeleted = false;
 
     @Builder
@@ -60,6 +62,7 @@ public class UserJpaEntity extends BaseDateTime {
                 .password(this.getPassword())
                 .name(this.getName())
                 .role(UserRole.valueOf(this.getRole().name()))
+                .notificationSubscribed(this.isNotificationSubscribed())
                 .build();
     }
 }
