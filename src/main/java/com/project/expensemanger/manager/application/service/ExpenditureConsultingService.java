@@ -50,16 +50,17 @@ public class ExpenditureConsultingService {
 
     public TodayExpenditureSummaryModel getTodayExpenditure(Long userId) {
         Budget budget = findLatestBudgetOrReturnEmpty(userId);
-        if (budget == null) return new TodayExpenditureSummaryModel(0L, List.of());
+
+        if (budget == null) return emptyTodayExpenditure();
 
         LocalDate today = LocalDate.now();
         LocalDate startDate = budget.getDate();
         LocalDate endDate = startDate.plusDays(29);
 
-        if (isOutOfBudgetPeriod(today, startDate, endDate)) return new TodayExpenditureSummaryModel(0L, List.of());
+        if (isOutOfBudgetPeriod(today, startDate, endDate)) return emptyTodayExpenditure();
 
         List<Expenditure> todayExpenditures = expenditurePort.findTodayExpenditure(userId);
-        if (todayExpenditures.isEmpty()) return new TodayExpenditureSummaryModel(0L, List.of());
+        if (todayExpenditures.isEmpty()) return emptyTodayExpenditure();
 
         List<Long> categoryIds = todayExpenditures.stream()
                 .map(Expenditure::getCategoryId)
@@ -155,5 +156,9 @@ public class ExpenditureConsultingService {
 
     private TodayBudgetRecommendationModel emptyRecommendation() {
         return new TodayBudgetRecommendationModel(0L, List.of(), "");
+    }
+
+    private TodayExpenditureSummaryModel emptyTodayExpenditure() {
+        return new TodayExpenditureSummaryModel(0L, List.of());
     }
 }
