@@ -40,5 +40,9 @@ jobs:
             export MYSQL_USER=${{ secrets.MYSQL_USER }}
             export MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
             export JWT_SECRET=${{ secrets.JWT_SECRET }}
+            export MAIL_HOST=${{ secrets.MAIL_HOST }}
+            export MAIL_PORT=${{ secrets.MAIL_PORT }}
+            export MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
+            export MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
             
             ./deploy.sh first
