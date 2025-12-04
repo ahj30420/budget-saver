@@ -2,6 +2,7 @@ package com.project.expensemanger.manager.adaptor.out.jpa.budget;
 
 import com.project.expensemanger.manager.adaptor.out.jpa.budget.entity.BudgetJpaEntity;
 import com.project.expensemanger.manager.adaptor.out.jpa.budget.projection.CategoryBudgetSummaryProjection;
+import com.project.expensemanger.manager.adaptor.out.jpa.budget.projection.CategoryBudgetUsageProjection;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface BudgetJpaRepository extends JpaRepository<BudgetJpaEntity, Long> {
+public interface BudgetJpaRepository extends JpaRepository<BudgetJpaEntity, Long>, BudgetCustomRepository {
 
     @Query("""
                 select b from BudgetJpaEntity b
@@ -39,4 +40,7 @@ public interface BudgetJpaRepository extends JpaRepository<BudgetJpaEntity, Long
                 group by b.category.id
             """)
     List<CategoryBudgetSummaryProjection> findTotalBudgetByCategory();
+
+    Optional<BudgetJpaEntity> findTopByUserIdAndIsDeletedFalseOrderByDateDesc(Long userId);
+
 }

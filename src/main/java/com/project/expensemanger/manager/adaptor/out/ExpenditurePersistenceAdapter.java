@@ -95,4 +95,12 @@ public class ExpenditurePersistenceAdapter implements ExpenditurePort {
                             entity.totalAmount());
                 }).collect(Collectors.toList());
     }
+
+    @Override
+    public List<Expenditure> findTodayExpenditure(Long userId) {
+        return expenditureJpaRepository.findTodayExpenditures(userId)
+                .stream()
+                .map(ExpenditureJpaEntity::toDomain)
+                .collect(Collectors.toList());
+    }
 }

@@ -22,4 +22,5 @@ public interface BudgetPort {
 
     List<CategoryBudgetStat> findSummaryByCategory();
 
+    Budget findLastestBudget(Long userId);
 }

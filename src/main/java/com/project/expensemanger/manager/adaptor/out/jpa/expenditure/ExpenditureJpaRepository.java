@@ -2,11 +2,14 @@ package com.project.expensemanger.manager.adaptor.out.jpa.expenditure;
 
 import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.entity.ExpenditureJpaEntity;
 import com.project.expensemanger.manager.adaptor.out.jpa.expenditure.projection.ExpenditureDetailProjection;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface ExpenditureJpaRepository extends JpaRepository<ExpenditureJpaEntity, Long>, ExpenditureCustomRepository{
+public interface ExpenditureJpaRepository extends JpaRepository<ExpenditureJpaEntity, Long>,
+        ExpenditureCustomRepository {
 
     Optional<ExpenditureJpaEntity> findByIdAndIsDeletedFalse(Long expenditureId);
 
@@ -25,4 +28,13 @@ public interface ExpenditureJpaRepository extends JpaRepository<ExpenditureJpaEn
                 where e.id = :expenditureId and e.isDeleted = false
             """)
     Optional<ExpenditureDetailProjection> findDetailById(Long expenditureId);
+
+    @Query("""
+                SELECT e
+                FROM ExpenditureJpaEntity e
+                WHERE e.user.id = :userId
+                  AND e.isDeleted = false
+                  AND FUNCTION('DATE', e.spendAt) = CURDATE()
+            """)
+    List<ExpenditureJpaEntity> findTodayExpenditures(Long userId);
 }

@@ -1,40 +1,46 @@
 package com.project.expensemanger.manager.adaptor.out.redis;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.expensemanger.manager.domain.budget.recommendation.vo.RecommendedBudgetResult;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
-@ExtendWith(SpringExtension.class)
 @DataRedisTest(excludeAutoConfiguration = {
-    org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration.class
+        org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration.class
 })
 @Import({RedisRepository.class, ObjectMapper.class})
 class RedisRepositoryTest {
 
-    private static final int PORT = 6379;
+    private static final String REDIS_IMAGE = "redis:7.0.8-alpine";
+    private static final int REDIS_PORT = 6379;
+    private static final GenericContainer redis;
 
-    @Container
-    static GenericContainer redis =
-            new GenericContainer<>(DockerImageName.parse("redis")).withExposedPorts(PORT);
+    static {
+        redis = new GenericContainer(REDIS_IMAGE)
+                .withExposedPorts(REDIS_PORT)
+                .withReuse(true);
+        redis.start();
+    }
+
+    @DynamicPropertySource
+    private static void registerRedisProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.data.redis.host", redis::getHost);
+        registry.add("spring.data.redis.port", () -> redis.getMappedPort(REDIS_PORT)
+                .toString());
+    }
 
     @Autowired
     RedisRepository redisRepository;
