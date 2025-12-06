@@ -63,7 +63,7 @@
 응답 지연 · TPS 저하가 발생해,  
 **DB 튜닝 → 집계 테이블 적용 → 캐싱** 과정을 통해 성능을 단계적으로 개선했다.
 
-## 1️⃣ V1 — 매 요청마다 전체 데이터 집계  
+### 1️⃣ V1 — 매 요청마다 전체 데이터 집계  
 
 초기 버전에서는 요청이 들어올 때마다 `Budget` 테이블 전체를 조회해  
 카테고리 합계 및 평균을 실시간으로 계산했다.
@@ -75,7 +75,7 @@
 → *데이터가 늘어날수록 성능이 기하급수적으로 나빠짐*
 
 
-## 2️⃣ V2 — 집계 테이블 도입으로 집계 비용 제거  
+### 2️⃣ V2 — 집계 테이블 도입으로 집계 비용 제거  
 <img src="./images/통계성 테이블 추가.png">
 GROUP BY 비용을 제거하기 위해  
 등록/수정/삭제 시점에 합계를 미리 계산해 저장하는  
@@ -90,25 +90,15 @@ GROUP BY 비용을 제거하기 위해
 - **유연성 부족**: 다른 기준의 통계가 필요하면 테이블이 더 늘어남
 - 실시간 집계 데이터가 필요 없는 API 특성상 더 최적화가 가능
 
-## 3️⃣ V3 — Redis 캐싱 적용 (최종 구조)  
+### 3️⃣ V3 — Redis 캐싱 적용 (최종 구조)  
 
 예산 추천 데이터는 실시간성이 낮다는 점에 착안해    
 **TTL 기반 캐싱 전략**으로 조회 속도를 최적화했다.
 
-<div style="display: flex; justify-content: space-between; text-align: center;">
-  <div style="flex: 1; margin: 0 8px;">
-    <img src="./images/예산 추천 v1.png" alt="v1" style="height: 180px; object-fit: cover; border-radius: 8px;">
-    <p>V1 구조</p>
-  </div>
-  <div style="flex: 1; margin: 0 8px;">
-    <img src="./images/예산 추천 v2.png" alt="v2" style="height: 180px; object-fit: cover; border-radius: 8px;">
-    <p>V2 구조</p>
-  </div>
-  <div style="flex: 1; margin: 0 8px;">
-    <img src="./images/예산 추천 v3.png" alt="v3" style="height: 180px; object-fit: cover; border-radius: 8px;">
-    <p>V3 구조</p>
-  </div>
-</div>
+| V1 구조 | V2 구조 | V3 구조 |
+|---------|---------|---------|
+| <img src="./images/예산 추천 v1.png" alt="v1" height="180"> | <img src="./images/예산 추천 v2.png" alt="v2" height="180"> | <img src="./images/예산 추천 v3.png" alt="v3" height="180"> |
+
 
 
 ### 🔍 개선 효과  
@@ -249,17 +239,9 @@ WHERE e.user_id = ?
 
 ### ♒ 성능 최적화: **비동기 처리**
 
-<div style="display: flex; gap: 16px; text-align: center;">
-  <div style="flex: 1; border: 2px solid #fff; border-radius: 8px; overflow: hidden; background-color: #000;">
-    <img src="./images/동기.png" alt="동기" style="width: 100%; height: auto; display: block;">
-    <p style="margin: 8px 0; color: #fff;">동기 처리 시</p>
-  </div>
-  <div style="flex: 1; border: 2px solid #fff; border-radius: 8px; overflow: hidden; background-color: #000;">
-    <img src="./images/비동기.png" alt="비동기" style="width: 100%; height: auto; display: block;">
-    <p style="margin: 8px 0; color: #fff;">비동기 처리 시</p>
-  </div>
-</div>
-
+| 동기 처리 시 | 비동기 처리 시 |
+|--------------|----------------|
+| <img src="./images/동기.png" alt="v1" height="180"> | <img src="./images/비동기.png" alt="v2" height="180">
 
 - 알림 발송을 **@Async 기반 비동기 처리**로 수행
 - 외부 통신 지연이 핵심 로직에 영향을 주지 않음
@@ -373,16 +355,9 @@ JPA/Hibernate 쿼리, QueryDSL, 조인, 인덱스 등은 **메모리 DB(H2)와 �
 
 ## ⏱️ Test 병렬 실행으로 실행 시간 단축
 
-<div style="display: flex; gap: 16px; text-align: center;">
-  <div style="flex: 1; border: 2px solid #fff; border-radius: 8px; overflow: hidden; background-color: #000;">
-    <img src="./images/병렬 처리 전.png" alt="동기" style="width: 100%; height: auto; display: block;">
-    <p style="margin: 8px 0; color: #fff;">병렬 처리 전</p>
-  </div>
-  <div style="flex: 1; border: 2px solid #fff; border-radius: 8px; overflow: hidden; background-color: #000;">
-    <img src="./images/병렬 처리 후.png" alt="비동기" style="width: 100%; height: auto; display: block;">
-    <p style="margin: 8px 0; color: #fff;">병렬 처리 후</p>
-  </div>
-</div>
+| 병렬 처리 전 | 병렬 처리 후 |
+|--------------|----------------|
+| <img src="./images/병렬 처리 전.png" alt="v1" height="180"> | <img src="./images/병렬 처리 후.png" alt="v2" height="180">
 
 기존 테스트는 순차적으로 실행되어, 이전 테스트가 끝나야 다음 테스트가 진행되었습니다.  
 이를 병렬로 실행하도록 설정하여 **빌드 시간과 테스트 소요 시간을 단축**했습니다.
